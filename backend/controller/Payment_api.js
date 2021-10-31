@@ -1,1 +1,0 @@
-export default Payment_api;

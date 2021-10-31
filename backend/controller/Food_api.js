@@ -1,1 +1,0 @@
-export default Food_api;
