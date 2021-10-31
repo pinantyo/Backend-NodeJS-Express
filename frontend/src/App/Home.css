@@ -2,11 +2,12 @@
 
 html, body, #root { height: 100%!important; }
 body {
-  background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
+  /*background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);*/
+  background-color: #000000eb;
   overflow-x: hidden;
 }
 
-.ocean { 
+/*.ocean { 
   height: 5%;
   width:100%;
   position:relative;
@@ -49,10 +50,10 @@ body {
   50% {
     transform: translate3d(0,5px,0);
   }
-}
+}*/
 
 .par1, .par2{
-  height: 50%; 
+  height: 40%; 
   background-attachment: fixed!important;
   background-position: center;
   background-repeat: no-repeat;
@@ -60,15 +61,24 @@ body {
 }
 
 .par1{
-  background: url('http://ners.unair.ac.id/site/images/Lihat/fastfood.png');
+  background: url('https://cdn.pixabay.com/photo/2016/05/24/14/42/green-1412466_960_720.png');
 }
 
 .par2{
-  background: url('https://cdn-2.tstatic.net/tribunnews/foto/bank/images/ilustrasi-kemasan-makanan-food-grade-yang-ramah-lingkungan-shutterstock.jpg');
+  background: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/0a135511-f80b-402a-a20c-65ac4a4e04ae/d9zpmjy-1c185d6b-3533-451f-9f61-b9693f25a140.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzBhMTM1NTExLWY4MGItNDAyYS1hMjBjLTY1YWM0YTRlMDRhZVwvZDl6cG1qeS0xYzE4NWQ2Yi0zNTMzLTQ1MWYtOWY2MS1iOTY5M2YyNWExNDAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Iuy2DrIAn7z7LjMI9mzOMkVf1r5TvQtOrWBxczCZLq8');
 }
 
 @media only screen and (max-device-width: 1366px) {
   .par1,.par2 {
     background-attachment: scroll;
   }
+}
+
+.flex-row{
+  margin-block-end: 5%;
+}
+
+.navigation{
+  position: relative;
+  top: 20%;
 }
