@@ -7,6 +7,30 @@ body {
   overflow-x: hidden;
 }
 
+li:hover{
+  border-top:5px solid white;
+  border-radius: 20px;
+  animation: ease-in downward .2s;
+}
+
+li{
+  animation: ease-out back-downward .2s;
+  border-radius: 20px;
+}
+@keyframes back-downward{
+  0%{border-top:5px solid white;}
+  100%{border-top:0px solid white;}
+}
+@keyframes downward{
+  0%{border-top:0px solid white;}
+  100%{border-top:5px solid white;}
+}
+.dropdown-menu{
+  position: relative!important;
+}
+.dropdown-active{
+  display: block!important;
+}
 /*.ocean { 
   height: 5%;
   width:100%;
