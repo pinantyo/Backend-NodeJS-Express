@@ -1,55 +1,56 @@
 import './App.css';
+import {useState} from 'react';
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 //Import components
 import Home from './App/Home/HomeIndex';
-import List from './App/ListJobs/List';
+import Careers from './App/ListJobs/List';
 import Aboutus from './App/ListJobs/Aboutus';
 
 function App() {
   return (
     <div className="App">
-      <div className = "par1">
-        <div className="title mt-3">
-          <h2 className="text-white text-center">Coba App</h2>
-        </div>
+      <Router>
+        <div className = "par1">
 
-        <Router>
+          <div className="title mt-3">
+            <h2 className="text-white text-center">Coba App</h2>
+          </div>
+
           <div className="navigation">
             <ul className="navbar-nav d-flex flex-row m-auto w-75 justify-content-between">
-              <Link to="/" className="nav-link">
+              <NavLink to="/" className="nav-link">
                 <li><p className="fs-5 text-white p-1" href="#">Home</p></li>
-              </Link>
+              </NavLink>
 
-              <Link to="/About-Us" className="nav-link">
+              <NavLink to="/Careers" className="nav-link">
+                <li><p className="fs-5 text-white p-1" href="#">Careers</p></li>
+              </NavLink>
+
+              <NavLink to="/About-Us" className="nav-link">
                 <li><p className="fs-5 text-white p-1" href="#">About Us</p></li>
-              </Link>
+              </NavLink>
 
-              <Link to="/List-job" className="nav-link">
-                <li><p className="fs-5 text-white p-1" href="#">List Jobs</p></li>
-              </Link>
-
-              <Link to="/Services" className="nav-link">
+              <NavLink to="/Services" className="nav-link">
                 <li><p className="fs-5 text-white p-1" href="#">Services</p></li>
-              </Link>
+              </NavLink>
 
-              <Link to="/Account" className="nav-link">
+              <NavLink to="/Account" className="nav-link">
                 <li><p className="fs-5 text-white p-1" href="#">Account</p></li>
-              </Link>
+              </NavLink>
             </ul>
           </div>
-        </Router>
-      </div>
+        </div>
 
-      <Router>
         <Routes>
-          <Route exact path="/" element={<Home/>} />
-          <Route exact path="/About-us" element={<Aboutus/>} />
-          <Route exact path="/List-job" element={<List/>} />
-          <Route exact path="/Services" />
-          <Route exact path="/Account" />
+          <Route exact path="/" element={<Home />} />
+          <Route path="/Careers" element={<Careers />} />
+          <Route path="/About-us" element={<Aboutus/>} />
+          <Route path="/Services" />
+          <Route path="/Account" />
         </Routes>
+
       </Router>
     </div>
   );
