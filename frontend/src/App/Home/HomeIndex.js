@@ -1,24 +1,8 @@
 import React from 'react';
-import './Home.css';
 
-function Home(){
+function HomeIndex(){
 	return(
 		<>
-			<div className = "par1">
-				<div className="title mt-3">
-					<h2 className="text-white text-center">Coba App</h2>
-				</div>
-				<div className="navigation">
-					<ul className="navbar-nav d-flex flex-row m-auto w-75 justify-content-between">
-						<li><a className="fs-5 nav-link text-white p-3" href="#">Home</a></li>
-						<li><a className="fs-5 nav-link text-white p-3" href="#">About Us</a></li>
-						<li><a className="fs-5 nav-link text-white p-3" href="#">Our Products</a></li>
-						<li><a className="fs-5 nav-link text-white p-3" href="#">Services</a></li>
-						<li><a className="fs-5 nav-link text-white p-3" href="#">Account</a></li>
-					</ul>
-				</div>
-			</div>
-
 			<div className="container mt-4 form">
 				<form className="d-flex flex-row justify-content-between m-0">
 					<input className="form-control" type="text" name="search" />
@@ -114,4 +98,4 @@ function Home(){
 	);
 }
 
-export default Home;
+export default HomeIndex;
