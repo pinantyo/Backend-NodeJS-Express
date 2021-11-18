@@ -4,9 +4,9 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 //Import components
-import Home from './App/Home/HomeIndex';
-import Careers from './App/ListJobs/List';
-import Aboutus from './App/ListJobs/Aboutus';
+import Home from './Components/Home/HomeIndex';
+import Careers from './Components/ListCareers/Careers';
+import Aboutus from './Components/AboutUs/Aboutus';
 
 function App() {
   return (
