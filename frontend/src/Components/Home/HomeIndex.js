@@ -1,8 +1,12 @@
 import React from 'react';
+
+//Import css
 import './HomeIndex.css';
+import '../global.css';
+
 function HomeIndex(){
 	return(
-		<>
+		<div className="pageLoad">
 			<div className="container mt-4">
 				<div>
 					<h1 className="text-white text-center">Feature</h1>
@@ -79,7 +83,7 @@ function HomeIndex(){
 
 
 			
-		</>
+		</div>
 	);
 }
 

@@ -1,6 +1,12 @@
+//Import css
+
+import './Aboutus.css';
+import '../global.css';
+
+
 export default function Aboutus(){
 	return(
-		<>
+		<div className="pageLoad">
 			<div className="container mt-4">
 				<div>
 					<h1 className="text-white text-center">About Us</h1>
@@ -29,6 +35,6 @@ export default function Aboutus(){
 					</div>
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
