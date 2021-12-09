@@ -1,11 +1,8 @@
-const express = require('express');
 const mongodb = require('mongodb');
-
-const router = express.Router();
 
 async function loadAccountCollection(){
 	const { MongoClient } = require('mongodb');
-	//const uri = "mongodb+srv://steven:steven2001@cluster0.gh4nv.mongodb.net/Cluster0?retryWrites=true&w=majority";
+	const uri = "mongodb+srv://steven:steven2001@cluster0.gh4nv.mongodb.net/Cluster0?retryWrites=true&w=majority";
 	try{
 		//MongoDB connect
 		const client = await mongodb.MongoClient.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -15,21 +12,12 @@ async function loadAccountCollection(){
 	}
 }
 
-//Get Post
-router.get('/', async (req, res) => {
-	let posts = await loadAccountCollection();
+const getAccount = (req, res, next) => {
+    let posts = await loadAccountCollection();
 	res.send(await posts.find({}).toArray());
-});
+};
 
-//Search
-router.get('/search', async (req, res) => {
-	const posts = await loadAccountCollection();
-	res.send(await posts.find({'text': new RegExp(req.body.text, 'i')}).toArray());
-	res.status(200).send();
-});
-
-//Add Post
-router.post('/', async(req, res)=>{
+const createAccount = (req, res, next) => {
 	const posts = await loadAccountCollection();
 	await posts.insertOne({
 		title: req.body.title,
@@ -39,10 +27,17 @@ router.post('/', async(req, res)=>{
 		if (err) throw err;
 	});
 	res.status(201).send();	
-});
+};
 
-//Delete Post
-router.delete('/:id', async (req, res)=>{
+const findAccount = (req, res, next) => {
+	res.json({message: "get one Account"});
+	const posts = await loadAccountCollection();
+	res.send(await posts.find({'text': new RegExp(req.body.text, 'i')}).toArray());
+	res.status(200).send();
+};
+
+const destroyAccount = (req, res, next) => {
+	res.json({message: "destroy Account"});
 	const posts = await loadAccountCollection();
 	await posts.deleteOne({
 		_id: new mongodb.ObjectId(req.params.id) 
@@ -50,10 +45,10 @@ router.delete('/:id', async (req, res)=>{
 		if (err) throw err;
 	});
 	res.status(200).send();
-});
+};
 
-//Update Post
-router.put('/:id', async(req, res)=>{
+const updateAccount = (req, res, next) => {
+	res.json({message: "update Account"});
 	const posts = await loadAccountCollection();
 	await posts.updateOne(
 		{_id: new mongodb.ObjectId(req.params.id) },
@@ -65,6 +60,12 @@ router.put('/:id', async(req, res)=>{
 		if (err) throw err;
 	});
 	res.status(200).send();
-});
+};
 
-module.exports = Account;
+module.exports = {
+	getAccount,
+	createAccount,
+	findAccount,
+	destroyAccount,
+	updateAccount,
+};
