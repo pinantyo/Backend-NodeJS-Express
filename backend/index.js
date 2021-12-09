@@ -1,23 +1,28 @@
-const express = require('express')
-const bodyParser = require('body-parser');
+require('dotenv').config();
+
+const express = require('express');
 const cors = require('cors');
 const app = express();
+const mongoose = require('mongoose');
+
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER_NAME}.gh4nv.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`);
+const db = mongoose.connection;
+db.on('error', (error) => console.error(error))
+db.once('open', () => console.log('Connected to Database'))
 
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({extended: true})); 
 
 var corsOptions = {
   origin: 'http://localhost:3000',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-
-
-app.use(cors(corsOptions));
 //List api:
-app.use('/api/account', cors(corsOptions), require('./controller/Account'))
-app.use('/api/posts',cors(corsOptions), require('./controller/Post'));
-app.use('/api/tags',cors(corsOptions), require('./controller/Tags'));
-app.use('/api/thread',cors(corsOptions), require('./controller/Thread'));
+app.use('/api/account', cors(corsOptions), require('./routes/account'))
+// app.use('/api/jobs',cors(corsOptions), require('./routes/status'));
+// app.use('/api/tags',cors(corsOptions), require('./routes/registration'));
+// app.use('/api/thread',cors(corsOptions), require('./routes/jobs'));
 
 
 const port = process.env.PORT || 5000;
