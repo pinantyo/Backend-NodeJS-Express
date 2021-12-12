@@ -19,11 +19,15 @@ router.get('/:id', getUser, (req, res) => {
 })
 
 // Creating one
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const user = new User({
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
+    img: {
+      data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+      contentType: 'image/png'
+    }
   })
   try {
     const newUser = await user.save()

@@ -1,5 +1,8 @@
 //Require Mongoose
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
+
+mongoose.plugin(slug);
 
 const jobSchema = new mongoose.Schema(
 {
@@ -9,8 +12,8 @@ const jobSchema = new mongoose.Schema(
   jobRequirements:{type:String},
   published:{type: Date, default:Date.now()},
   status: {type: String},
-  tags:[Number],
-  slug:{type:String, required:true},
+  tags:[String],
+  slug:{type:String, slug:"jobTitle"},
 },{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
