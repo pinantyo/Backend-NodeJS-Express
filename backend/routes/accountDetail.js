@@ -8,15 +8,19 @@ const userDetail = require('../models/userDetails');
 
 
 // Route
-router.get('/:slug/:id', getUser, (req, res) => {
-  res.json(res.user)
+router.get('/:slug/:id', getUserDetails, (req, res) => {
+  res.json(res.userInformation);
 })
 
 // Creating one
 router.post('/:slug/:id', getUser, async (req, res, next) => {
   const user = new userDetail({
-    
-  })
+    account_id:res.userInformation._id,
+    fullname:req.body.fullname,
+    contacts:req.body.contacts,
+    location:req.body.location,
+    companySize:req.body.companySize,
+  });
   try {
     const newUser = await user.save()
     res.status(201).json(newUser)
@@ -26,28 +30,31 @@ router.post('/:slug/:id', getUser, async (req, res, next) => {
 })
 
 // Updating One
-router.patch('/:slug/:id', getUser, async (req, res) => {
-  if (req.body.email != null) {
-    res.user.email = req.body.email
+router.patch('/:slug/:id', getUserDetails, async (req, res) => {
+  if (req.body.fullname != null) {
+    res.userInformation.fullname = req.body.fullname;
   }
-  if (req.body.username != null) {
-    res.user.username = req.body.username
+  if (req.body.contacts != null) {
+    res.userInformation.contacts = req.body.contacts;
   }
-  if (req.body.password != null) {
-    res.user.password = req.body.password
+  if (req.body.location != null) {
+    res.userInformation.location = req.body.location;
+  }
+  if (req.body.companySize != null) {
+    res.userInformation.companySize = req.body.companySize;
   }
   try {
-    const updatedUser = await res.user.save()
-    res.json(updatedUser)
+    const updatedUser = await res.userInformation.save();
+    res.json(updatedUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    res.status(400).json({ message: err.message });
   }
 })
 
 // Deleting One
-router.delete('/:id', getUser, async (req, res) => {
+router.delete('/:id', getUserDetails, async (req, res) => {
   try {
-    await res.user.remove()
+    await res.userInformation.remove()
     res.json({ message: 'Deleted User' })
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -66,6 +73,22 @@ async function getUser(req, res, next) {
     return res.status(500).json({ message: err.message })
   }
 
-  res.user = user
+  res.userInformation = user
   next()
 }
+
+async function getUserDetails(req, res, next) {
+  let userInformation;
+  try {
+    userInformation = await User.find({}, {projection: {account_id:req.params.id}})
+    if (userInformation == null) {
+      return res.status(404).json({ message: 'Cannot find user' })
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+
+  res.userInformation = userInformation
+  next()
+}
+module.exports = router

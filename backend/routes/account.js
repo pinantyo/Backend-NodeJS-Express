@@ -2,6 +2,11 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 
+// Image Upload
+const path = require('path');
+const fs = require('fs');
+const uploadImage = require('../middleware/imageUpload');
+
 // Getting all
 router.get('/', async (req, res) => {
   try {
@@ -19,13 +24,13 @@ router.get('/:id', getUser, (req, res) => {
 })
 
 // Creating one
-router.post('/', async (req, res, next) => {
+router.post('/', uploadImage.single("image"), async (req, res, next) => {
   const user = new User({
     email: req.body.email,
     username: req.body.username,
     password: req.body.password,
     img: {
-      data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+      data: fs.readFileSync(path.join(__dirname + '/images/account/' + req.body.image, 'public')),
       contentType: 'image/png'
     }
   })

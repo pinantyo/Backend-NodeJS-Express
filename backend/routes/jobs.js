@@ -36,15 +36,32 @@ router.post('/', async (req, res, next) => {
 
 // Updating One
 router.patch('/:slug/:id', getJob, async (req, res) => {
-  if (req.body.email != null) {
-    res.jobs.email = req.body.email
+
+  if (req.body.authorId != null) {
+    res.jobs.authorId = req.body.authorId
   }
-  if (req.body.username != null) {
-    res.jobs.username = req.body.username
+  if (req.body.jobTitle != null) {
+    res.jobs.jobTitle = req.body.jobTitle
   }
-  if (req.body.password != null) {
-    res.jobs.password = req.body.password
+  if (req.body.jobDescription != null) {
+    res.jobs.jobDescription = req.body.jobDescription
   }
+  if (req.body.jobDescription != null) {
+    res.jobs.jobDescription = req.body.jobDescription
+  }
+  if (req.body.jobRequirements != null) {
+    res.jobs.jobRequirements = req.body.jobRequirements
+  }
+  if (req.body.jobRequirements != null) {
+    res.jobs.jobRequirements = req.body.jobRequirements
+  }
+  if (req.body.status != null) {
+    res.jobs.status = req.body.status
+  }
+  else {
+    res.jobs.status = "false"
+  }
+
   try {
     const updatedUser = await res.jobs.save()
     res.json(updatedUser)

@@ -21,6 +21,7 @@ var corsOptions = {
 }
 //List api:
 app.use('/api/account', cors(corsOptions), require('./routes/account'));
+app.use('/api/account-details', cors(corsOptions), require('./routes/accountDetail'));
 // app.use('/api/jobs',cors(corsOptions), require('./routes/status'));
 // app.use('/api/tags',cors(corsOptions), require('./routes/registration'));
 app.use('/api/jobs', cors(corsOptions), require('./routes/jobs'));

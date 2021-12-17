@@ -6,6 +6,7 @@ mongoose.plugin(slug);
 
 const userDetailsSchema = new mongoose.Schema(
 {
+    account_id:{type:String, required:true},
     fullname:{type:String, required:true},
     contacts:{type:String, required:true},
     location:{type:String},
