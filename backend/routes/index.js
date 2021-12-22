@@ -7,7 +7,12 @@ const serverResponse = require('../response');
 
 
 router.use('/account', require('./account'));
+router.use('/account/detail-information',require('./accountDetail'));
 router.use('/jobs', require('./jobs'));
+
+
+// Status Input
+router.use('/status', require('./status'));
 
 router.all('*', (req, res) => {
 	return serverResponse.error(res, 404, 'Not Found');

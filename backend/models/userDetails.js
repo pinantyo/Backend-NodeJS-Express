@@ -1,12 +1,12 @@
 //Require Mongoose
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-generator');
-
+const Schema = mongoose.Schema;
 mongoose.plugin(slug);
 
-const userDetailsSchema = new mongoose.Schema(
+const userDetailsSchema = new Schema(
 {
-    account_id:{type:String, required:true},
+    account_id:{type: Schema.Types.ObjectId, required:true, ref: "User"},
     fullname:{type:String, required:true},
     contacts:{type:String, required:true},
     location:{type:String},

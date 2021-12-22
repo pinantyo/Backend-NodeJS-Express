@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+// Server Response
+const serverResponse = require('../response');
 
 // Models
 const User = require('../models/user');
@@ -8,14 +10,27 @@ const userDetail = require('../models/userDetails');
 
 
 // Route
-router.get('/:slug/:id', getUserDetails, (req, res) => {
-  res.json(res.userInformation);
-})
+router.get('/:id', getUserDetails, (req, res) => {
+  return serverResponse.ok(res, res.userInformation);
+});
 
 // Creating one
-router.post('/:slug/:id', getUser, async (req, res, next) => {
+router.post('/:id', getUser, async (req, res) => {
+
+  const requiredFiled = ['fullname','contacts'];
+
+  try{
+    requiredFiled.forEach((field)=>{
+      if(!req.body[field]){
+        throw new Error(`${field} must not be null`);
+      }
+    });
+  } catch(err){
+    return serverResponse.error(res, 500, err.message);
+  }
+
   const user = new userDetail({
-    account_id:res.userInformation._id,
+    account_id:req.params.id,
     fullname:req.body.fullname,
     contacts:req.body.contacts,
     location:req.body.location,
@@ -23,14 +38,14 @@ router.post('/:slug/:id', getUser, async (req, res, next) => {
   });
   try {
     const newUser = await user.save()
-    res.status(201).json(newUser)
+    return serverResponse.ok(res, newUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    return serverResponse.error(res, 400, err.message);
   }
-})
+});
 
 // Updating One
-router.patch('/:slug/:id', getUserDetails, async (req, res) => {
+router.patch('/:id', getUserDetails, async (req, res) => {
   if (req.body.fullname != null) {
     res.userInformation.fullname = req.body.fullname;
   }
@@ -45,21 +60,21 @@ router.patch('/:slug/:id', getUserDetails, async (req, res) => {
   }
   try {
     const updatedUser = await res.userInformation.save();
-    res.json(updatedUser);
+    return serverResponse.ok(res, updatedUser);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    return serverResponse.error(res, 400, err.message);
   }
-})
+});
 
 // Deleting One
 router.delete('/:id', getUserDetails, async (req, res) => {
   try {
     await res.userInformation.remove()
-    res.json({ message: 'Deleted User' })
+    return res.json({ message: 'Deleted User' })
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    return serverResponse.error(res, 500, err.message);
   }
-})
+});
 
 
 async function getUser(req, res, next) {
@@ -75,12 +90,14 @@ async function getUser(req, res, next) {
 
   res.userInformation = user
   next()
-}
+};
 
 async function getUserDetails(req, res, next) {
   let userInformation;
   try {
-    userInformation = await User.find({}, {projection: {account_id:req.params.id}})
+    userInformation = await userDetail.findOne({account_id:req.params.id}).populate({
+      path:'account_id',
+    });
     if (userInformation == null) {
       return res.status(404).json({ message: 'Cannot find user' })
     }
@@ -90,5 +107,6 @@ async function getUserDetails(req, res, next) {
 
   res.userInformation = userInformation
   next()
-}
+};
+
 module.exports = router

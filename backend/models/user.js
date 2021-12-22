@@ -2,7 +2,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 SALT_WORK_FACTOR = 10;
-const userSchema = new mongoose.Schema(
+const Schema = mongoose.Schema;
+const userSchema = new Schema(
 {
     email:{type:String, required:true},
     username:{type: String, required: true, unique: true},
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
         contentType:String
     },
     token:{type: String},
+    role:{type: Schema.Types.ObjectId, ref: "Role"},
 },{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })

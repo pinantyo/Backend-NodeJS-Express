@@ -21,20 +21,20 @@ const uploadImage = require('../middleware/imageUpload');
 router.get('/', async (req, res) => {
   try {
     const user = await User.find({});
-    res.send(user);
+    return serverResponse.ok(res, user);
     // res.json(User)
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    return serverResponse.error(res, 500, err.message);
   }
 })
 
 // Getting One
 router.get('/:id', getUser, (req, res) => {
-  res.json(res.user)
+  return serverResponse.ok(res, res.user);
 })
 
 // Creating one
-router.post('/', uploadImage.single("image"), async (req, res, next) => {
+router.post('/', uploadImage.single("image"), async (req, res) => {
   
   const requiredFiled = ['email', 'username', 'password'];
   
@@ -43,7 +43,7 @@ router.post('/', uploadImage.single("image"), async (req, res, next) => {
       if(!req.body[field]){
         throw new Error(`${field} must not be null`);
       }
-    })
+    });
   } catch (err) {
     return serverResponse.error(res, 400, err.message);
   }
@@ -70,9 +70,9 @@ router.post('/', uploadImage.single("image"), async (req, res, next) => {
 
   try {
     const newUser = await user.save()
-    res.status(201).json(newUser)
+    return serverResponse.ok(res, newUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    return serverResponse.error(res, 400,err.message);
   }
 })
 
@@ -105,9 +105,8 @@ router.post('/login', async (req, res) => {
     }
     return serverResponse.error(res,400,"Invalid Credentials");
   } catch (err) {
-    console.log(err);
+    return serverResponse.error(res, 500, err.message);
   }
-  // Our register logic ends here
 });
 
 // Updating One
@@ -123,9 +122,9 @@ router.patch('/:id', getUser, async (req, res) => {
   }
   try {
     const updatedUser = await res.user.save()
-    res.json(updatedUser)
+    return serverResponse.ok(res, updatedUser);
   } catch (err) {
-    res.status(400).json({ message: err.message })
+    return serverResponse.error(res, 400, err.message);
   }
 })
 
@@ -133,9 +132,9 @@ router.patch('/:id', getUser, async (req, res) => {
 router.delete('/:id', getUser, async (req, res) => {
   try {
     await res.user.remove()
-    res.json({ message: 'Deleted User' })
+    return res.json({ message: 'Deleted User' })
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    return serverResponse.error(res, 500, err.message);
   }
 })
 
