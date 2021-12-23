@@ -4,7 +4,11 @@ const router = express.Router()
 // Server response
 const serverResponse = require('../response');
 
+// Models
 const Jobs = require('../models/jobs')
+
+// Middleware
+const auth = require('../middleware/auth');
 
 // Getting all
 router.get('/', async (req, res) => {
@@ -23,7 +27,7 @@ router.get('/:slug/:id', getJob, (req, res, next) => {
 });
 
 // Creating one
-router.post('/', async (req, res, next) => {
+router.post('/', auth.verifyToken, async (req, res, next) => {
   const jobs = new Jobs({
     authorId:req.body.authorId,
     jobTitle:req.body.jobTitle,
@@ -40,32 +44,17 @@ router.post('/', async (req, res, next) => {
 });
 
 // Updating One
-router.patch('/:slug/:id', getJob, async (req, res) => {
+router.patch('/:slug/:id', auth.verifyUser, getJob, async (req, res) => {
+  const field = ['authorId', 'jobTitle', 'jobDescription', 'jobRequirements', 'status'];
 
-  if (req.body.authorId != null) {
-    res.jobs.authorId = req.body.authorId;
-  }
-  if (req.body.jobTitle != null) {
-    res.jobs.jobTitle = req.body.jobTitle;
-  }
-  if (req.body.jobDescription != null) {
-    res.jobs.jobDescription = req.body.jobDescription;
-  }
-  if (req.body.jobDescription != null) {
-    res.jobs.jobDescription = req.body.jobDescription;
-  }
-  if (req.body.jobRequirements != null) {
-    res.jobs.jobRequirements = req.body.jobRequirements;
-  }
-  if (req.body.jobRequirements != null) {
-    res.jobs.jobRequirements = req.body.jobRequirements;
-  }
-  if (req.body.status != null) {
-    res.jobs.status = req.body.status;
-  }
-  else {
-    res.jobs.status = "false";
-  }
+  field.forEach((field) => {
+    if(req.body[field]){
+      res.jobs[field] = req.body[field];
+    }
+    else if(field === 'status' && !field){
+      res.jobs[field] = "false";
+    }
+  });
 
   try {
     const updatedUser = await res.jobs.save();
@@ -76,7 +65,7 @@ router.patch('/:slug/:id', getJob, async (req, res) => {
 })
 
 // Deleting One
-router.delete('/:id', getJob, async (req, res) => {
+router.delete('/:id', auth.verifyUser,getJob, async (req, res) => {
   try {
     await res.jobs.remove()
     res.json({ message: 'Deleted Jobs' })

@@ -15,10 +15,13 @@ const jwt = require('jsonwebtoken');
 // Image Upload
 const path = require('path');
 const fs = require('fs');
+
+// Middleware
 const uploadImage = require('../middleware/imageUpload');
+const auth = require('../middleware/auth');
 
 // Getting all
-router.get('/', async (req, res) => {
+router.get('/', auth.verifyToken, async (req, res) => {
   try {
     const user = await User.find({});
     return serverResponse.ok(res, user);
@@ -29,7 +32,7 @@ router.get('/', async (req, res) => {
 })
 
 // Getting One
-router.get('/:id', getUser, (req, res) => {
+router.get('/:id', auth.verifyToken, getUser, (req, res) => {
   return serverResponse.ok(res, res.user);
 })
 
@@ -110,7 +113,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Updating One
-router.patch('/:id', getUser, async (req, res) => {
+router.patch('/:id', auth.verifyUser, getUser, async (req, res) => {
   if (req.body.email != null) {
     res.user.email = req.body.email
   }
@@ -129,7 +132,7 @@ router.patch('/:id', getUser, async (req, res) => {
 })
 
 // Deleting One
-router.delete('/:id', getUser, async (req, res) => {
+router.delete('/:id', auth.verifyUser, getUser, async (req, res) => {
   try {
     await res.user.remove()
     return res.json({ message: 'Deleted User' })
@@ -138,7 +141,7 @@ router.delete('/:id', getUser, async (req, res) => {
   }
 })
 
-async function getUser(req, res, next) {
+async function getUser(req, res, next){
   let user
   try {
     user = await User.findById(req.params.id)

@@ -8,14 +8,17 @@ const serverResponse = require('../response');
 const User = require('../models/user');
 const userDetail = require('../models/userDetails');
 
+// Middleware
+const auth = require('../middleware/auth');
 
 // Route
-router.get('/:id', getUserDetails, (req, res) => {
+router.get('/:id', auth.verifyToken, getUserDetails, (req, res) => {
   return serverResponse.ok(res, res.userInformation);
 });
 
+
 // Creating one
-router.post('/:id', getUser, async (req, res) => {
+router.post('/:id', auth.verifyUser, getUser, async (req, res) => {
 
   const requiredFiled = ['fullname','contacts'];
 
@@ -45,7 +48,7 @@ router.post('/:id', getUser, async (req, res) => {
 });
 
 // Updating One
-router.patch('/:id', getUserDetails, async (req, res) => {
+router.patch('/:id', auth.verifyUser, getUserDetails, async (req, res) => {
   if (req.body.fullname != null) {
     res.userInformation.fullname = req.body.fullname;
   }
@@ -67,7 +70,7 @@ router.patch('/:id', getUserDetails, async (req, res) => {
 });
 
 // Deleting One
-router.delete('/:id', getUserDetails, async (req, res) => {
+router.delete('/:id', auth.verifyUser, getUserDetails, async (req, res) => {
   try {
     await res.userInformation.remove()
     return res.json({ message: 'Deleted User' })
