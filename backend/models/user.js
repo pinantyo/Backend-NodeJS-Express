@@ -8,10 +8,7 @@ const userSchema = new Schema(
     email:{type:String, required:true},
     username:{type: String, required: true, unique: true},
     password:{type: String, required: true},
-    img:{
-        data: Buffer,
-        contentType:String
-    },
+    img:{type: Object},
     token:{type: String},
     role:{type: Schema.Types.ObjectId, ref: "Role"},
 },{

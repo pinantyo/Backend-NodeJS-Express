@@ -26,11 +26,11 @@ const uploadImage = require('../middleware/imageUpload');
 const auth = require('../middleware/auth');
 
 // Getting all
-router.get('/', auth.verifyToken, userController.getAll);
-router.get('/:id', auth.verifyToken, userController.getOne);
-router.post('/', uploadImage.single("image"), userController.createOne);
+router.get('/', userController.getAll);
+router.get('/:id', userController.getOne);
+router.post('/', uploadImage.userAvatar.single("image"), userController.createOne);
 router.post('/login', userController.login);
-router.patch('/:id', auth.verifyUser, userController.patchOne);
+router.patch('/:id', auth.verifyUser, uploadImage.userAvatar.single("image"),userController.patchOne);
 router.delete('/:id', auth.verifyUser, userController.deleteOne);
 
 

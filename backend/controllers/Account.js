@@ -10,9 +10,11 @@ const serverResponse = require('../response');
 // Json Web Tokens
 const jwt = require('jsonwebtoken');
 
-// Image Upload
+// Image
 const path = require('path');
 const fs = require('fs');
+const { promisify } = require('util');
+const unlinkAsync = promisify(fs.unlink)
 
 // Getting all
 const getAll = async (req, res) => {
@@ -42,6 +44,7 @@ const createOne = async (req, res) => {
         throw new Error(`${field} must not be null`);
       }
     });
+
   } catch (err) {
     return serverResponse.error(res, 400, err.message);
   }
@@ -50,11 +53,11 @@ const createOne = async (req, res) => {
     email: req.body.email.toLowerCase(),
     username: req.body.username,
     password: req.body.password,
-    // img: {
-    //   data: fs.readFileSync(path.join(__dirname + '/images/account/' + req.body.image, 'public')),
-    //   contentType: 'image/png'
-    // },
-  })
+  });
+
+  if(req.file){
+    user.img = req.file;
+  }
 
   const token = jwt.sign(
     { user_id: user._id},
@@ -109,25 +112,36 @@ const login = async (req, res) => {
 
 // Updating One
 const patchOne = async (req, res) => {
-	user = await getUser(req, res);
+  user = await getUser(req, res);
 	field = ['email', 'username', 'password'];
 	field.forEach((field) => {
 		if(req.body[field]){
 			user[field] = req.body[field];
 		}
 	});
+
+  if(req.file){
+    if(user.img){
+      await unlinkAsync(user.img.path);
+    }
+    user.img = req.file;
+  }
+      
   	
-  	try {
-    	const updatedUser = await user.save();
-    	return serverResponse.ok(res, updatedUser);
-  	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
-  	}
+  try {
+    const updatedUser = await user.save();
+    return serverResponse.ok(res, updatedUser);
+  } catch (err) {
+    return serverResponse.error(res, 400, err.message);
+  }
 }
 
 // Deleting One
 const deleteOne = async (req, res) => {
 	user = await getUser(req, res);
+
+  // Delete Image
+  await unlinkAsync(user.img.path);
   	try {
     	await user.remove();
     	return res.json({ message: 'Deleted User' });
