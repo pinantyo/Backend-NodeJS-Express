@@ -17,7 +17,7 @@ router.get('/', userController.getAll);
 router.get('/:id',userController.getOne);
 router.post('/', userController.createOne);
 router.post('/login', userController.login);
-router.patch('/:id', auth.verifyUser, uploadImage.userAvatar.array("image",3),userController.patchOne);
+router.patch('/:id', auth.verifyUser, uploadImage.userAvatar.single("image"),userController.patchOne);
 router.delete('/:id', auth.verifyUser, userController.deleteOne);
 
 

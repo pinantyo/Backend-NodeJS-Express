@@ -2,7 +2,11 @@
 const serverResponse = require('../response');
 
 // Models
-const Jobs = require('../models/jobs')
+const Jobs = require('../models/jobs');
+const User = require('../models/user');
+
+// User Validation
+const auth = require('../middleware/auth');
 
 // Getting all
 const getAll = async (req, res) => {
@@ -22,12 +26,31 @@ const getOne = async (req, res) => {
 
 // Creating one
 const createOne = async (req, res) => {
+	requiredFiled = ['authorId','jobTitle','jobDescription','jobRequirements'];
+	requiredFiled.forEach((field) => {
+		if(!req.body[field]){
+			throw new Error(`${field} must not be null`);
+		}
+	});
+
+	// Check User
+	try{
+		user = await User.findById(req.body.authorId);
+		if(user) {
+			throw new Error("Account is needed");
+		}
+	} catch (err) {
+		serverResponse.error(res, 500, "Internal Server Error");
+	}
+
+	formattedName = formattedCapitalize(req.body.jobTitle);
+
   	const jobs = new Jobs({
     	authorId:req.body.authorId,
-    	jobTitle:req.body.jobTitle,
+    	jobTitle:formattedName,
     	jobDescription:req.body.jobDescription,
     	jobRequirements:req.body.jobRequirements,
-  	};
+  	});
 
   	try {
     	const newJob = await jobs.save();
@@ -47,10 +70,14 @@ const patchOne = async (req, res) => {
     	if(req.body[field]){
       		jobs[field] = req.body[field];
     	}
+    	else if(field === 'jobTitle' && !field){
+      		jobs[field] = formattedName;
+    	}
     	else if(field === 'status' && !field){
       		jobs[field] = "false";
     	}
   	});
+  	
 
   	try {
     	const updatedUser = await jobs.save();
@@ -76,12 +103,22 @@ async function getJob(req, res) {
   	try {
     	jobs = await Jobs.findById(req.params.id)
     	if (jobs == null) {
-      		return serverResponse.error(res, 404, 'Cannot find jobs');
+      		return serverResponse.error(res, 404, 'Not Found');
     	}
   	} catch (err) {
     	return serverResponse.error(res, 500, err.message);
   	}
   	return jobs;
+}
+
+function formattedCapitalize(data){
+	var formattedName = data.toLowerCase().split(" ");
+  		for(var i=0; i < formattedName.length; i++){
+    	formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
+  	}
+  
+  	formattedName = formattedName.join(" ");
+  	return formattedName;
 }
 
 module.exports = {getAll, getOne, createOne, patchOne, deleteOne};

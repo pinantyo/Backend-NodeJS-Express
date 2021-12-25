@@ -6,19 +6,19 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
 {
     email:{type:String, required:true},
-    username:{type: String, required: true, unique: true},
+    username:{type: String, unique: true},
     password:{type: String, required: true},
     img:{type: Object},
     token:{type: String},
     role:{type: Schema.Types.ObjectId, ref: "Role"},
 },{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
-})
+});
 
 userSchema.pre('save', function(next){
     var user = this;
 
-    if(!user.isModified('password')) return next();
+    if(!user.isModified('password') || !user.isModified('username')) return next();
 
 
     // Pembuatan Salt
@@ -34,6 +34,9 @@ userSchema.pre('save', function(next){
         })
 
     })
-})
+
+    var name = user.email.split("@").length==2 ? user.email.split("@")[0].toLowerCase() : null;
+    user.username = name.charAt(0).toUpperCase() + name.slice(1);
+});
 
 module.exports = mongoose.model('User', userSchema);

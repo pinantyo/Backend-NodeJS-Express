@@ -24,7 +24,6 @@ const getAll = async (req, res) => {
   try {
     const user = await User.find({});
     return serverResponse.ok(res, user);
-    // res.json(User)
   } catch (err) {
     return serverResponse.error(res, 500, err.message);
   }
@@ -39,7 +38,7 @@ const getOne = async (req, res) => {
 // Creating one
 const createOne = async (req, res) => {
   
-  const requiredFiled = ['email', 'username', 'password'];
+  const requiredFiled = ['email', 'password'];
   
   try{
     requiredFiled.forEach((field) => {
@@ -118,23 +117,24 @@ const patchOne = async (req, res) => {
 			user[field] = req.body[field];
 		}
 	});
+  
   // Single IMG
-  // if(req.file){
-  //   if(user.img){
-  //     await unlinkAsync(user.img.path);
-  //   }
-  //   user.img = req.file;
-  // }
+  if(req.file){
+    if(user.img){
+      await unlinkAsync(user.img.path);
+    }
+    user.img = req.file;
+  }
 
   // Multiple IMG
-  if(req.files){
-    if(user.img){
-      for(const item of user.img){
-        await unlinkAsync(item.path);
-      }
-    }
-    user.img = req.files;
-  }
+  // if(req.files){
+  //   if(user.img){
+  //     for(const item of user.img){
+  //       await unlinkAsync(item.path);
+  //     }
+  //   }
+  //   user.img = req.files;
+  // }
   
   try {
     const updatedUser = await user.save();
@@ -148,10 +148,15 @@ const patchOne = async (req, res) => {
 const deleteOne = async (req, res) => {
 	user = await getUser(req, res);
 
-  // Multiple IMG
-  for(const item of user.img){
-    await unlinkAsync(item.path);
+  // Single IMG
+  if(user.img){
+    await unlinkAsync(user.img.path);
   }
+
+  // Multiple IMG
+  // for(const item of user.img){
+  //   await unlinkAsync(item.path);
+  // }
 
   try {
     await user.remove();
@@ -167,13 +172,13 @@ const deleteOne = async (req, res) => {
 // Route
 const getDetails = async (req, res) => {
   const userInformation = await getUserDetails(req, res);
-  return serverResponse.ok(res, res.userInformation);
+  return serverResponse.ok(res, userInformation);
 };
 
 
 // Creating one
 const postDetails = async (req, res) => {
-  const requiredFiled = ['fullname','contacts'];
+  const requiredFiled = ['fullname','contacts','location'];
   try{
     requiredFiled.forEach((field)=>{
       if(!req.body[field]){
@@ -184,9 +189,16 @@ const postDetails = async (req, res) => {
     return serverResponse.error(res, 500, err.message);
   }
 
+  var formattedName = req.body.fullname.toLowerCase().split(" ");
+  for(var i=0; i < formattedName.length; i++){
+    formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
+  }
+  
+  formattedName = formattedName.join(" ");
+
   const user = new userDetail({
     account_id:req.params.id,
-    fullname:req.body.fullname,
+    fullname:formattedName,
     contacts:req.body.contacts,
     location:req.body.location,
     companySize:req.body.companySize,
