@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
 };
 
 
-const verifyRole = async (req, res, next) => {
+const verifyAdmin = async (req, res, next) => {
 	let user;
 	const token = req.headers["x-access-token"];
 
@@ -32,7 +32,7 @@ const verifyRole = async (req, res, next) => {
 		const decoded = jwt.verify(token, process.env.TOKEN_KEY);
 		user = await User.findById(decoded.user_id);
 
-		if (!user || user.role !== 'user') {
+		if (!user && user.role === 'user') {
       		return serverResponse.error(res, 403, "Forbidden");
     	}
 		
@@ -69,4 +69,4 @@ const verifyUser = async (req, res, next) => {
   	return next()
 };
 
-module.exports = {verifyToken, verifyRole, verifyUser};
+module.exports = {verifyToken, verifyAdmin, verifyUser};

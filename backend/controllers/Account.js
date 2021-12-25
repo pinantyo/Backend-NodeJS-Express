@@ -1,5 +1,8 @@
 require('dotenv').config();
+
+// Models
 const User = require('../models/user');
+const userDetail = require('../models/userDetails');
 
 // Bcrypt
 const bcrypt = require('bcrypt');
@@ -54,10 +57,6 @@ const createOne = async (req, res) => {
     username: req.body.username,
     password: req.body.password,
   });
-
-  if(req.file){
-    user.img = req.file;
-  }
 
   const token = jwt.sign(
     { user_id: user._id},
@@ -119,15 +118,24 @@ const patchOne = async (req, res) => {
 			user[field] = req.body[field];
 		}
 	});
+  // Single IMG
+  // if(req.file){
+  //   if(user.img){
+  //     await unlinkAsync(user.img.path);
+  //   }
+  //   user.img = req.file;
+  // }
 
-  if(req.file){
+  // Multiple IMG
+  if(req.files){
     if(user.img){
-      await unlinkAsync(user.img.path);
+      for(const item of user.img){
+        await unlinkAsync(item.path);
+      }
     }
-    user.img = req.file;
+    user.img = req.files;
   }
-      
-  	
+  
   try {
     const updatedUser = await user.save();
     return serverResponse.ok(res, updatedUser);
@@ -140,27 +148,126 @@ const patchOne = async (req, res) => {
 const deleteOne = async (req, res) => {
 	user = await getUser(req, res);
 
-  // Delete Image
-  await unlinkAsync(user.img.path);
-  	try {
-    	await user.remove();
-    	return res.json({ message: 'Deleted User' });
-  	} catch (err) {
-	    return serverResponse.error(res, 500, err.message);
-  	}
+  // Multiple IMG
+  for(const item of user.img){
+    await unlinkAsync(item.path);
+  }
+
+  try {
+    await user.remove();
+    return res.json({ message: 'Deleted User' });
+  } catch (err) {
+    return serverResponse.error(res, 500, err.message);
+  }
 }
+
+
+// Account Details
+
+// Route
+const getDetails = async (req, res) => {
+  const userInformation = await getUserDetails(req, res);
+  return serverResponse.ok(res, res.userInformation);
+};
+
+
+// Creating one
+const postDetails = async (req, res) => {
+  const requiredFiled = ['fullname','contacts'];
+  try{
+    requiredFiled.forEach((field)=>{
+      if(!req.body[field]){
+        throw new Error(`${field} must not be null`);
+      }
+    });
+  } catch(err){
+    return serverResponse.error(res, 500, err.message);
+  }
+
+  const user = new userDetail({
+    account_id:req.params.id,
+    fullname:req.body.fullname,
+    contacts:req.body.contacts,
+    location:req.body.location,
+    companySize:req.body.companySize,
+  });
+  try {
+    const newUser = await user.save()
+    return serverResponse.ok(res, newUser);
+  } catch (err) {
+    return serverResponse.error(res, 400, err.message);
+  }
+};
+
+// Updating One
+const patchDetails = async (req, res) => {
+  let userInformation;
+  try{
+    userInformation = await getUserDetails(req, res);
+  } catch (err) {
+    return serverResponse.error(res, 404, err.message);
+  }
+  
+  field = ['fullname','contacts','location','companySize'];
+  field.forEach((field) => {
+    if (req.body[field]) {
+      userInformation[field] = req.body[field];
+    }
+  });
+  
+
+  try {
+    const updatedUser = await userInformation.save();
+    return serverResponse.ok(res, updatedUser);
+  } catch (err) {
+    return serverResponse.error(res, 400, err.message);
+  }
+};
+
+// Deleting One
+const deleteDetails = async (req, res) => {
+  let userInformation;
+  try{
+    userInformation = await getUserDetails(req, res);
+  } catch (err) {
+    return serverResponse.error(res, 404, err.message);
+  }
+
+  try {
+    await userInformation.remove()
+    return res.json({ message: 'Deleted User' })
+  } catch (err) {
+    return serverResponse.error(res, 500, err.message);
+  }
+};
 
 async function getUser(req, res){
   let user
   try {
     user = await User.findById(req.params.id)
     if (user == null) {
-      return res.status(404).json({ message: 'Cannot find user' })
+      return serverResponse.error(res, 404, "Not Found");
     }
   } catch (err) {
-    return res.status(500).json({ message: err.message })
+    return serverResponse.error(res, 500, err.message);
   }
   return user;
 }
 
-module.exports = {getAll, getOne, createOne, login, patchOne, deleteOne};
+async function getUserDetails(req, res) {
+  let userInformation;
+  try {
+    userInformation = await userDetail.findOne({account_id:req.params.id}).populate({
+      path:'account_id',
+    });
+    if (userInformation == null) {
+      return serverResponse.error(res, 404, "Not Found");
+    }
+  } catch (err) {
+    return serverResponse.error(res, 500, err.message);
+  }
+
+  return userInformation;
+};
+
+module.exports = {getAll, getOne, createOne, login, patchOne, deleteOne, getDetails, postDetails, patchDetails, deleteDetails};

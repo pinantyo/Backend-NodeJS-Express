@@ -41,7 +41,7 @@ const staticFileConfiguration = {
             cb(null, dir)
         },
         filename: (req, file, cb) => {
-            const imageName = 'assets -' + Date.now() + path.extname(file.originalname);
+            const imageName = 'assets -' + file.originalname + path.extname(file.originalname);
             cb(null, imageName);
         },
     }),

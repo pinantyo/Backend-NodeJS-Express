@@ -7,7 +7,7 @@ const serverResponse = require('../response');
 
 
 router.use('/account', require('./account'));
-router.use('/account/detail-information',require('./accountDetail'));
+router.use('/account/detail-information', require('./account'));
 router.use('/jobs', require('./jobs'));
 
 
