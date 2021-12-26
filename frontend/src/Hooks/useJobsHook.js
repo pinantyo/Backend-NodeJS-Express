@@ -1,5 +1,9 @@
+require("dontenv").config();
 import {useEffect, useState} from 'react';
 import axios from 'axios';
+
+const URL = process.env.HTTP_URL + '/jobs';
+
 
 const useGetJobs = (query, pageNumber) => {
 	if(query.length === 0) query="*";

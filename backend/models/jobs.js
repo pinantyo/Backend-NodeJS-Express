@@ -27,11 +27,13 @@ jobSchema.pre('save', function(next){
     if(!job.isModified('jobTitle')) return next();
 
     var formattedName = job.jobTitle.toLowerCase().split(" ");
-      for(var i=0; i < formattedName.length; i++){
+
+    for(var i=0; i < formattedName.length; i++){
       formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
     }
-  
+
     job.jobTitle = formattedName.join(" ");
+    next();
 });
 
 module.exports = mongoose.model('Jobs', jobSchema);

@@ -37,6 +37,7 @@ userSchema.pre('save', function(next){
 
     var name = user.email.split("@").length==2 ? user.email.split("@")[0].toLowerCase() : null;
     user.username = name.charAt(0).toUpperCase() + name.slice(1);
+    next();
 });
 
 module.exports = mongoose.model('User', userSchema);
