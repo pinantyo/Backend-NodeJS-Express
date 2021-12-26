@@ -101,7 +101,7 @@ const deleteOne = async (req, res) => {
 async function getJob(req, res) {
   	let jobs;
   	try {
-    	jobs = await Jobs.findById(req.params.id)
+    	jobs = await Jobs.findById(req.params.id).populate({path:'authorId'});
     	if (jobs == null) {
       		return serverResponse.error(res, 404, 'Not Found');
     	}

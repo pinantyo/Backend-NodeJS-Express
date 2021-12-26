@@ -1,7 +1,7 @@
 import {useState, useRef, useCallback} from 'react';
 
 //Import controller
-import hooksJobs from '../../Hooks/useGetJobs';
+import hooksJobs from '../../Hooks/useJobsHook';
 
 //Import css
 import './Jobs.css';
@@ -15,7 +15,7 @@ function Jobs(){
 	const {jobs, hasMore, loading, error} = hooksJobs.useGetJobs(query, pageNumber);
 
 	const observe = useRef();
-	const lastBookElement = useCallback(node => {
+	const lastJob = useCallback(node => {
 		if(loading) return;
 		if(observe.current) observe.current.disconnect();
 		observe.current = new IntersectionObserver(entries => {
@@ -36,7 +36,7 @@ function Jobs(){
 		<div className="pageLoad">
 			<div className="container mt-4">
 				<div className="row mb-5">
-					<h1 className="text-white text-center">Books</h1>
+					<h1 className="text-white text-center">List of Jobs</h1>
 				</div>
 				
 				<div className="row form mt-5 mb-5">
@@ -60,12 +60,12 @@ function Jobs(){
 					{jobs.map((job, index) => { 
 				        if (jobs.length === index + 1) {
 				          return(
-				            <div className="pageLoad card col-5 d-flex flex-row p-0" ref={lastBookElement} key={job.cover_i}>
+				            <div className="pageLoad card col-5 d-flex flex-row p-0" ref={lastJob} key={job.cover_i}>
 								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
 								<div> 
-									<h4>{job.title}</h4>
-									<h6>Author: {job.author_name}</h6>
-									<p>Publish:</p>
+									<h4>{job.jobTitle}</h4>
+									<h6>Author: {job.jobDescription}</h6>
+									<p>Publish:{job.published}</p>
 								</div>
 							</div>
 				          )
@@ -74,9 +74,9 @@ function Jobs(){
 				          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={job.cover_i}>
 								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
 								<div> 
-									<h4>{job.title}</h4>
-									<h6>Author: {job.author_name}</h6>
-									<p>Publish:</p>
+									<h4>{job.jobTitle}</h4>
+									<h6>Author: {job.jobDescription}</h6>
+									<p>Publish:{job.published}</p>
 								</div>
 							</div>
 				          )
