@@ -1,18 +1,18 @@
 import {useState, useRef, useCallback} from 'react';
 
 //Import controller
-import useGetBooks from '../../Hooks/useGetBooks';
+import hooksJobs from '../../Hooks/useGetJobs';
 
 //Import css
-import './Books.css';
+import './Jobs.css';
 import '../global.css';
 
 
-function Books(){
+function Jobs(){
 	const [query, setQuery] = useState('');
 	const [pageNumber, setPageNumber] = useState(1);
 
-	const {books, hasMore, loading, error} = useGetBooks(query, pageNumber);
+	const {jobs, hasMore, loading, error} = hooksJobs.useGetJobs(query, pageNumber);
 
 	const observe = useRef();
 	const lastBookElement = useCallback(node => {
@@ -57,25 +57,25 @@ function Books(){
 		
 
 				<div className="row justify-content-evenly">
-					{books.map((book, index) => { 
-				        if (books.length === index + 1) {
+					{jobs.map((job, index) => { 
+				        if (jobs.length === index + 1) {
 				          return(
-				            <div className="pageLoad card col-5 d-flex flex-row p-0" ref={lastBookElement} key={book.cover_i}>
+				            <div className="pageLoad card col-5 d-flex flex-row p-0" ref={lastBookElement} key={job.cover_i}>
 								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
 								<div> 
-									<h4>{book.title}</h4>
-									<h6>Author: {book.author_name}</h6>
+									<h4>{job.title}</h4>
+									<h6>Author: {job.author_name}</h6>
 									<p>Publish:</p>
 								</div>
 							</div>
 				          )
 				        } else {
 				          return(
-				          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={book.cover_i}>
+				          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={job.cover_i}>
 								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
 								<div> 
-									<h4>{book.title}</h4>
-									<h6>Author: {book.author_name}</h6>
+									<h4>{job.title}</h4>
+									<h6>Author: {job.author_name}</h6>
 									<p>Publish:</p>
 								</div>
 							</div>
@@ -100,4 +100,4 @@ function Books(){
 
 	);
 }
-export default Books;
+export default Jobs;

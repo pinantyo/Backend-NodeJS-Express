@@ -1,11 +1,9 @@
 import './App.css';
-import {useState} from 'react';
-import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 //Import components
 import Home from './Components/Home/HomeIndex';
-import Books from './Components/Books/Books';
+import Jobs from './Components/Jobs/Jobs';
 import Aboutus from './Components/AboutUs/Aboutus';
 
 //Components error
@@ -27,8 +25,8 @@ function App() {
                 <li><p className="fs-5 text-white p-1" href="#">Home</p></li>
               </NavLink>
 
-              <NavLink to="/Books" className="nav-link">
-                <li><p className="fs-5 text-white p-1" href="#">Books</p></li>
+              <NavLink to="/Jobs" className="nav-link">
+                <li><p className="fs-5 text-white p-1" href="#">Jobs</p></li>
               </NavLink>
 
               <NavLink to="/About-Us" className="nav-link">
@@ -38,20 +36,15 @@ function App() {
               <NavLink to="/Services" className="nav-link">
                 <li><p className="fs-5 text-white p-1" href="#">Services</p></li>
               </NavLink>
-
-              <NavLink to="/Account" className="nav-link">
-                <li><p className="fs-5 text-white p-1" href="#">Account</p></li>
-              </NavLink>
             </ul>
           </div>
         </div>
 
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/Books" element={<Books />} />
+          <Route path="/Jobs" element={<Jobs />} />
           <Route path="/About-us" element={<Aboutus/>} />
           <Route path="/Services" element={<Maintenance />}/>
-          <Route path="/Account" element={<Maintenance />}/>
         </Routes>
 
       </Router>

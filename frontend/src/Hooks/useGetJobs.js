@@ -1,16 +1,16 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 
-export default function useGetBooks(query, pageNumber){
+const useGetJobs = (query, pageNumber) => {
 	if(query.length === 0) query="*";
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
-	const [books, setBooks] = useState([]);
+	const [jobs, setJobs] = useState([]);
 	const [hasMore, setHasMore] = useState(false);
 
 	useEffect(() => {
-		setBooks([]);
-	}, [query]) //every change in query will result to a reset for var books
+		setJobs([]);
+	}, [query]) //every change in query will result to a reset for var jobs
 
 	useEffect(() => {
 		setLoading(true);
@@ -22,9 +22,9 @@ export default function useGetBooks(query, pageNumber){
 			params: {q: query, page: pageNumber},
 			cancelToken: new axios.CancelToken(c => cancel = c) //Generation of axio cancel token to prevent continuos requests
 		}).then(res => {
-			setBooks(prevBooks => {
-				//Set use to avoid duplication, combine old books (prevBooks) and new books (res.data)
-				return [...new Set([...prevBooks, ...res.data.docs.map(b => b)])]; //Use map to take books title only ... = list
+			setJobs(prevJobs => {
+				//Set use to avoid duplication, combine old jobs (prevJobs) and new jobs (res.data)
+				return [...new Set([...prevJobs, ...res.data.docs.map(b => b)])]; //Use map to take jobs title only ... = list
 			});
 			setHasMore(res.data.docs.length > 0);
 			setLoading(false);
@@ -39,7 +39,9 @@ export default function useGetBooks(query, pageNumber){
 	return {
 		loading,
 		error,
-		books,
+		jobs,
 		hasMore
 	};
-}
+};
+
+export default {useGetJobs};

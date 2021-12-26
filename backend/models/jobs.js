@@ -19,6 +19,19 @@ const jobSchema = new Schema(
   slug:{type:String, slug:"jobTitle"},
 },{
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
-})
+});
+
+jobSchema.pre('save', function(next){
+    var job = this;
+
+    if(!job.isModified('jobTitle')) return next();
+
+    var formattedName = job.jobTitle.toLowerCase().split(" ");
+      for(var i=0; i < formattedName.length; i++){
+      formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
+    }
+  
+    job.jobTitle = formattedName.join(" ");
+});
 
 module.exports = mongoose.model('Jobs', jobSchema);

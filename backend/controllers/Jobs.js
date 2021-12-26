@@ -29,25 +29,23 @@ const createOne = async (req, res) => {
 	requiredFiled = ['authorId','jobTitle','jobDescription','jobRequirements'];
 	requiredFiled.forEach((field) => {
 		if(!req.body[field]){
-			throw new Error(`${field} must not be null`);
-		}
+        	throw new Error(`${field} must not be null`);
+      	}
 	});
 
 	// Check User
 	try{
 		user = await User.findById(req.body.authorId);
-		if(user) {
+		if(!user) {
 			throw new Error("Account is needed");
 		}
 	} catch (err) {
-		serverResponse.error(res, 500, "Internal Server Error");
+		serverResponse.error(res, 403, err.message);
 	}
-
-	formattedName = formattedCapitalize(req.body.jobTitle);
 
   	const jobs = new Jobs({
     	authorId:req.body.authorId,
-    	jobTitle:formattedName,
+    	jobTitle:req.body.jobTitle,
     	jobDescription:req.body.jobDescription,
     	jobRequirements:req.body.jobRequirements,
   	});
@@ -69,9 +67,6 @@ const patchOne = async (req, res) => {
   	field.forEach((field) => {
     	if(req.body[field]){
       		jobs[field] = req.body[field];
-    	}
-    	else if(field === 'jobTitle' && !field){
-      		jobs[field] = formattedName;
     	}
     	else if(field === 'status' && !field){
       		jobs[field] = "false";
@@ -109,16 +104,6 @@ async function getJob(req, res) {
     	return serverResponse.error(res, 500, err.message);
   	}
   	return jobs;
-}
-
-function formattedCapitalize(data){
-	var formattedName = data.toLowerCase().split(" ");
-  		for(var i=0; i < formattedName.length; i++){
-    	formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
-  	}
-  
-  	formattedName = formattedName.join(" ");
-  	return formattedName;
 }
 
 module.exports = {getAll, getOne, createOne, patchOne, deleteOne};
