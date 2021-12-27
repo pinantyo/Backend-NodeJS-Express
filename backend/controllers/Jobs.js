@@ -11,7 +11,7 @@ const auth = require('../middleware/auth');
 // Getting all
 const getAll = async (req, res) => {
   	try {
-    	const jobs = await Jobs.find({});
+    	const jobs = await Jobs.find({}).populate({path:'authorId'});
     	return serverResponse.ok(res,jobs);
   	} catch (err) {
     	return serverResponse.error(res, 500, err.message);

@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 SALT_WORK_FACTOR = 10;
 const Schema = mongoose.Schema;
+
+const userDetailsSchema = require("./userDetails");
 const userSchema = new Schema(
 {
     email:{type:String, required:true},

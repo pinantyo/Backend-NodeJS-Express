@@ -54,46 +54,57 @@ function Jobs(){
 					</ul>				
 				</div>
 
-		
 
-				<div className="row justify-content-evenly">
-					{jobs.map((job, index) => { 
-				        if (jobs.length === index + 1) {
-				          return(
-				            <div className="pageLoad card col-5 d-flex flex-row p-0" ref={lastJob} key={job.cover_i}>
-								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
-								<div> 
-									<h4>{job.jobTitle}</h4>
-									<h6>Author: {job.jobDescription}</h6>
-									<p>Publish:{job.published}</p>
+				<div className="d-flex flex-row">
+					<div className="d-flex flex-column w-50 scrollcomponent">
+						{jobs.map((job, index) => { 
+					        if (jobs.length === index + 1) {
+					          return(
+					            <div className="pageLoad card d-flex flex-row p-0" ref={lastJob} key={job.cover_i}>
+									<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
+									<div className="m-auto"> 
+										<h4>{job.jobTitle}</h4>
+										<h6>{job.authorId.username}</h6>
+										<p>Publish:{job.published}</p>
+									</div>
 								</div>
-							</div>
-				          )
-				        } else {
-				          return(
-				          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={job.cover_i}>
-								<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
-								<div> 
-									<h4>{job.jobTitle}</h4>
-									<h6>Author: {job.jobDescription}</h6>
-									<p>Publish:{job.published}</p>
+					          )
+					        } else {
+					          return(
+					          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={job.cover_i}>
+									<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
+									<div> 
+										<h4>{job.jobTitle}</h4>
+										<h6>Author: {job.jobDescription}</h6>
+										<p>Publish:{job.published}</p>
+									</div>
 								</div>
-							</div>
-				          )
-				        }
-				          
-				    })}
+					          )
+					        }
+					          
+					    })}
 
-				    {loading && 
-						<div className="d-flex justify-content-center m-5 loading">
-						  <div className="spinner-border text-warning" role="status">
-						    <span className="sr-only"></span>
-						  </div>
-						  <span className="text-white ms-2">Loading...</span>
-						</div>
-					}
+					    {loading && 
+							<div className="d-flex justify-content-center m-5 loading">
+							  <div className="spinner-border text-warning" role="status">
+							    <span className="sr-only"></span>
+							  </div>
+							  <span className="text-white ms-2">Loading...</span>
+							</div>
+						}
+
+					</div>
+
+					<div className="bg-light w-100">
+						LOL
+
+					</div>
 
 				</div>
+
+		
+
+					
 
 			</div>
 		</div>

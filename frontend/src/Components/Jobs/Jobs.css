@@ -7,3 +7,30 @@
 	0%{transform: translateY(-20px);opacity: 0};
 	100%{transform: translateY(0px);opacity: 1};
 }
+
+.scrollcomponent{
+	height: 100vh;
+	overflow-y: scroll;
+}
+/* width */
+.scrollcomponent::-webkit-scrollbar {
+  	width: 5px;
+}
+
+/* Track */
+.scrollcomponent::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+.scrollcomponent::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.scrollcomponent::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+

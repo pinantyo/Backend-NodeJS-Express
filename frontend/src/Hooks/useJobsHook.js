@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const URL = 'http://127.0.0.1:5000/api' + '/jobs';
 
-// const useGetJobs = (query, pageNumber) => {
+// const useGetOneJob = (query, pageNumber) => {
 // 	if(query.length === 0) query="*";
 // 	const [loading, setLoading] = useState(true);
 // 	const [error, setError] = useState(false);
@@ -22,7 +22,6 @@ const URL = 'http://127.0.0.1:5000/api' + '/jobs';
 // 		axios({
 // 			method: 'GET',
 // 			url: URL,
-// 			params: {q: query, page: pageNumber},
 // 			cancelToken: new axios.CancelToken(c => cancel = c) //Generation of axio cancel token to prevent continuos requests
 // 		}).then(res => {
 // 			setJobs(prevJobs => {
