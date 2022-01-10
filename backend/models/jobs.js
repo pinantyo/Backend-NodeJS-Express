@@ -21,6 +21,8 @@ const jobSchema = new Schema(
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
+jobSchema.index({jobTitle: 'text', authorId: 'text'});
+
 jobSchema.pre('save', function(next){
     var job = this;
 

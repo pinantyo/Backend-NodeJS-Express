@@ -28,4 +28,7 @@ router.patch('/:slug/:id', auth.verifyUser, jobController.patchOne);
 // Deleting One
 router.delete('/:slug/:id', auth.verifyUser, jobController.deleteOne);
 
+// Search Related
+router.get('/search', jobController.searchJob);
+
 module.exports = router;

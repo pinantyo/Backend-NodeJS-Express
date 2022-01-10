@@ -56,27 +56,27 @@ function Jobs(){
 
 
 				<div className="d-flex flex-row">
-					<div className="d-flex flex-column w-50 scrollcomponent">
+					<div className="d-flex flex-column w-75 scrollcomponent">
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
-					            <div className="pageLoad card d-flex flex-row p-0" ref={lastJob} key={job.cover_i}>
-									<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
-									<div className="m-auto"> 
+					            <div className="pageLoad card d-flex flex-row p-0" ref={lastJob} key={index}>
+									<img className="w-50 p-2" src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+									<div className="m-auto p-2"> 
 										<h4>{job.jobTitle}</h4>
 										<h6>{job.authorId.username}</h6>
-										<p>Publish:{job.published}</p>
+										<p>Publish: {new Date(job.published).toLocaleString()}</p>
 									</div>
 								</div>
 					          )
 					        } else {
 					          return(
-					          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={job.cover_i}>
-									<img className="w-25" src="https://www.pngitem.com/pimgs/m/78-788752_team-work-logo-png-transparent-png.png" />
-									<div> 
+					          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={index}>
+									<img className="w-50 p-2" src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename}`} />
+									<div className="m-auto p-2"> 
 										<h4>{job.jobTitle}</h4>
-										<h6>Author: {job.jobDescription}</h6>
-										<p>Publish:{job.published}</p>
+										<h6>{job.authorId.username}</h6>
+										<p>Publish: {new Date(job.published).toLocaleString()}</p>
 									</div>
 								</div>
 					          )
@@ -96,7 +96,7 @@ function Jobs(){
 					</div>
 
 					<div className="bg-light w-100">
-						LOL
+						<h4 className="text-center text-occupation">Choose your occupation</h4>
 
 					</div>
 

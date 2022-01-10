@@ -8,6 +8,8 @@ const path = require("path")
 
 require("./config/database").connect();
 
+app.use("/public", express.static(__dirname + '/public')); // Pembuatan global folder
+
 app.set("views",path.join(__dirname,"views"))
 
 

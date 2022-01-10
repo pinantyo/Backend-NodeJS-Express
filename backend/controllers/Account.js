@@ -23,6 +23,9 @@ const unlinkAsync = promisify(fs.unlink)
 const getAll = async (req, res) => {
   try {
     const user = await User.find({});
+    if(user.length == 0){
+      serverResponse.error(res, 404, 'Not Found');
+    }
     return serverResponse.ok(res, user);
   } catch (err) {
     return serverResponse.error(res, 500, err.message);
@@ -257,7 +260,7 @@ async function getUser(req, res){
   let user
   try {
     user = await User.findById(req.params.id)
-    if (user == null) {
+    if (user.length == 0) {
       return serverResponse.error(res, 404, "Not Found");
     }
   } catch (err) {
@@ -269,14 +272,12 @@ async function getUser(req, res){
 async function getUserDetails(req, res) {
   let userInformation;
   try {
-    userInformation = await userDetail.findOne({account_id:req.params.id}).populate({
-      path:'account_id',
-    });
+    userInformation = await userDetail.findOne({account_id:req.params.id}).populate({path:'account_id',});
     if (userInformation == null) {
-      return serverResponse.error(res, 404, "Not Found");
+      serverResponse.error(res, 404, 'Not Found');
     }
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 
   return userInformation;
