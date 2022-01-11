@@ -1,16 +1,17 @@
 import {useState, useRef, useCallback} from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
-//Import controller
+// Import controller
 import hooksJobs from '../../Hooks/useJobsHook';
 
-//Import css
+// Import css
 import './Jobs.css';
 import '../global.css';
 
-
-//Components error
-import Maintenance from '../Error/Maintenance';
+// Components Detail
+import JobDetail from './Details/JobDetail';
+// Components error
+import Error from '../Error/Error';
 
 
 function Jobs(){
@@ -61,30 +62,30 @@ function Jobs(){
 
 
 				<div className="d-flex flex-row">
-					<div className={`d-flex flex-column w-75 scrollcomponent ${loading ? "skeleton":""}`}>
+					<div className={`d-flex flex-column w-75 scrollcomponent job-list ${loading ? "skeleton":""}`}>
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
-					          	<NavLink to={`/${job.slug}/${job._id}`} className="nav-link">
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
 						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
 										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
-											<h4>{job.jobTitle}</h4>
-											<h6>{job.authorId.username}</h6>
-											<p>Publish: {new Date(job.published).toLocaleString()}</p>
+											<h4 className="text-dark">{job.jobTitle}</h4>
+											<h6 className="text-dark">{job.authorId.username}</h6>
+											<p className="text-dark">Publish: {new Date(job.published).toLocaleString()}</p>
 										</div>
 									</div>
 								</NavLink>
 					          )
 					        } else {
 					          return(
-					          	<NavLink to={`/${job.slug}/${job._id}`} className="nav-link">
-						          	<div className="pageLoad card col-5 d-flex flex-row p-0 mb-0" key={index}>
-										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename}`} />
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
+										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
-											<h4>{job.jobTitle}</h4>
-											<h6>{job.authorId.username}</h6>
-											<p>Publish: {new Date(job.published).toLocaleString()}</p>
+											<h4 className="text-dark">{job.jobTitle}</h4>
+											<h6 className="text-dark">{job.authorId.username}</h6>
+											<p className="text-dark">Publish: {new Date(job.published).toLocaleString()}</p>
 										</div>
 									</div>
 								</NavLink>
@@ -105,8 +106,11 @@ function Jobs(){
 					<div className="bg-light w-100">
 						<Routes>
 							{jobs.map((job, index) => {
-								<Route path={`/${job.slug}/${job._id}`} element={<Maintenance />}/>
+								return(
+									<Route path={`:${job.slug}/:${job._id}`} element={<JobDetail/>} key={job._id}/>
+								);
 							})}
+							<Route path='*' element={<Error/>}/>
         				</Routes>
 						<h4 className="text-center text-occupation">Choose your occupation</h4>
 					</div>

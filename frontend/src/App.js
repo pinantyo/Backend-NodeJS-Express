@@ -7,7 +7,7 @@ import Jobs from './Components/Jobs/Jobs';
 import Aboutus from './Components/AboutUs/Aboutus';
 
 //Components error
-import Maintenance from './Components/Error/Maintenance';
+import Error from './Components/Error/Error';
 
 function App() {
   return (
@@ -42,9 +42,10 @@ function App() {
 
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route path="/Jobs" element={<Jobs />} />
+          <Route path="/Jobs/*" element={<Jobs />} />
           <Route path="/About-us" element={<Aboutus/>} />
-          <Route path="/Services" element={<Maintenance />}/>
+          <Route path="/Services" element={<Aboutus/>}/>
+          <Route path="*" element={<Error />} />
         </Routes>
 
       </Router>

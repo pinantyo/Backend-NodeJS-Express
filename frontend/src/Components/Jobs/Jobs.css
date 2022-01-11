@@ -34,9 +34,6 @@
   background: #555; 
 }
 
-.text-occupation{
-	position: absolute;
-}
 
 .skel-img{
 	min-height: 119.98px;
@@ -52,4 +49,18 @@
 	to {
     background-position: 315px 0, 0 0, 0 190px, 50px 195px;
   }
+}
+
+.job-list .active{
+	border-bottom: 0!important;
+	animation: 0!important;
+}
+
+.job-list .active .card{
+	background-color: rgba(255,255,255,.85)!important;
+}
+.job-list .nav-link{
+	padding: 0!important;
+	border-bottom: 0!important;
+	animation: 0!important;
 }
