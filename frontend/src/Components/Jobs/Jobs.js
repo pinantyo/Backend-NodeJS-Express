@@ -1,4 +1,5 @@
 import {useState, useRef, useCallback} from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 //Import controller
 import hooksJobs from '../../Hooks/useJobsHook';
@@ -6,6 +7,10 @@ import hooksJobs from '../../Hooks/useJobsHook';
 //Import css
 import './Jobs.css';
 import '../global.css';
+
+
+//Components error
+import Maintenance from '../Error/Maintenance';
 
 
 function Jobs(){
@@ -56,32 +61,35 @@ function Jobs(){
 
 
 				<div className="d-flex flex-row">
-					<div className="d-flex flex-column w-75 scrollcomponent">
+					<div className={`d-flex flex-column w-75 scrollcomponent ${loading ? "skeleton":""}`}>
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
-					            <div className="pageLoad card d-flex flex-row p-0" ref={lastJob} key={index}>
-									<img className="w-50 p-2" src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
-									<div className="m-auto p-2"> 
-										<h4>{job.jobTitle}</h4>
-										<h6>{job.authorId.username}</h6>
-										<p>Publish: {new Date(job.published).toLocaleString()}</p>
+					          	<NavLink to={`/${job.slug}/${job._id}`} className="nav-link">
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
+										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+										<div className="m-auto p-2"> 
+											<h4>{job.jobTitle}</h4>
+											<h6>{job.authorId.username}</h6>
+											<p>Publish: {new Date(job.published).toLocaleString()}</p>
+										</div>
 									</div>
-								</div>
+								</NavLink>
 					          )
 					        } else {
 					          return(
-					          	<div className="pageLoad card col-5 d-flex flex-row p-0" key={index}>
-									<img className="w-50 p-2" src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename}`} />
-									<div className="m-auto p-2"> 
-										<h4>{job.jobTitle}</h4>
-										<h6>{job.authorId.username}</h6>
-										<p>Publish: {new Date(job.published).toLocaleString()}</p>
+					          	<NavLink to={`/${job.slug}/${job._id}`} className="nav-link">
+						          	<div className="pageLoad card col-5 d-flex flex-row p-0 mb-0" key={index}>
+										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename}`} />
+										<div className="m-auto p-2"> 
+											<h4>{job.jobTitle}</h4>
+											<h6>{job.authorId.username}</h6>
+											<p>Publish: {new Date(job.published).toLocaleString()}</p>
+										</div>
 									</div>
-								</div>
+								</NavLink>
 					          )
-					        }
-					          
+					        }    
 					    })}
 
 					    {loading && 
@@ -92,12 +100,15 @@ function Jobs(){
 							  <span className="text-white ms-2">Loading...</span>
 							</div>
 						}
-
 					</div>
 
 					<div className="bg-light w-100">
+						<Routes>
+							{jobs.map((job, index) => {
+								<Route path={`/${job.slug}/${job._id}`} element={<Maintenance />}/>
+							})}
+        				</Routes>
 						<h4 className="text-center text-occupation">Choose your occupation</h4>
-
 					</div>
 
 				</div>

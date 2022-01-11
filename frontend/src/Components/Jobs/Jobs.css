@@ -38,3 +38,18 @@
 	position: absolute;
 }
 
+.skel-img{
+	min-height: 119.98px;
+}
+
+.skeleton{
+	background-image: linear-gradient(45deg, rgba(255,255,255,.7), rgba(0,0,0,.4));
+	animation: skeleton-color 2s infinite;
+	border-radius: 5px;
+}
+
+@keyframes skeleton-color{
+	to {
+    background-position: 315px 0, 0 0, 0 190px, 50px 195px;
+  }
+}
