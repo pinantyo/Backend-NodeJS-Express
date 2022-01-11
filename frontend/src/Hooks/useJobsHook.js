@@ -42,8 +42,8 @@ const useGetJobs = (query, pageNumber) => {
 	};
 };
 
-const useGetJob = (id) => {
-	if(id.length === 0) id="";
+const useGetJob = (slug, id) => {
+	if(id.length === 0 && slug.length === 0) id=slug="*";
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [jobs, setJobs] = useState([]);
@@ -58,7 +58,7 @@ const useGetJob = (id) => {
 		let cancel;
 		axios({
 			method: 'GET',
-			url: URL+`/${id}`,
+			url: URL+`/${slug}/${id}`,
 			cancelToken: new axios.CancelToken(c => cancel = c) //Generation of axio cancel token to prevent continuos requests
 		}).then(res => {
 			setJobs(res.data.success.data);

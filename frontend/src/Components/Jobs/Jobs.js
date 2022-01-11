@@ -72,7 +72,7 @@ function Jobs(){
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
-											<p className="text-dark">Publish: {new Date(job.published).toLocaleString()}</p>
+											<p className="text-dark">Published: {new Date(job.published).toLocaleString()}</p>
 										</div>
 									</div>
 								</NavLink>
@@ -85,7 +85,7 @@ function Jobs(){
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
-											<p className="text-dark">Publish: {new Date(job.published).toLocaleString()}</p>
+											<p className="text-dark">Published: {new Date(job.published).toLocaleString()}</p>
 										</div>
 									</div>
 								</NavLink>
