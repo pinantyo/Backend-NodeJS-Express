@@ -2,7 +2,7 @@ import {useState, useRef, useCallback} from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 // Import controller
-import hooksJobs from '../../Hooks/useJobsHook';
+import useJobsHook from '../../Hooks/useJobsHook';
 
 // Import css
 import './Jobs.css';
@@ -18,7 +18,7 @@ function Jobs(){
 	const [query, setQuery] = useState('');
 	const [pageNumber, setPageNumber] = useState(1);
 
-	const {jobs, hasMore, loading, error} = hooksJobs.useGetJobs(query, pageNumber);
+	const {jobs, hasMore, loading, error} = useJobsHook.useGetJobs(query, pageNumber);
 
 	const observe = useRef();
 	const lastJob = useCallback(node => {
