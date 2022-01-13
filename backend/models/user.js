@@ -41,14 +41,13 @@ userSchema.pre('save', function(next){
             if(err) return next(err);
             // Overwrite password userSchema dengan yang hash
             user.password = hash;
-            next();
+            return next();
         })
 
     })
 
     var name = user.email.split("@").length==2 ? user.email.split("@")[0].toLowerCase() : null;
     user.username = name.charAt(0).toUpperCase() + name.slice(1);
-    next();
 });
 
 // Delete on Cascade

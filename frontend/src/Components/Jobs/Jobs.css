@@ -1,6 +1,6 @@
 .loading{
 	opacity: 1;
-	animation: ease-in fade-in .5s;
+	animation: ease-in fade-in .2s;
 }
 
 @keyframes fade-in{

@@ -62,13 +62,13 @@ function Jobs(){
 
 
 				<div className="d-flex flex-row">
-					<div className={`d-flex flex-column w-75 scrollcomponent job-list ${loading ? "skeleton":""}`}>
+					<div className={`d-flex flex-column w-75 scrollcomponent job-list`}>
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
 					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
 						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
-										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
@@ -81,7 +81,7 @@ function Jobs(){
 					          return(
 					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
 						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
-										<img className={`w-50 p-2 ${loading ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
@@ -110,9 +110,7 @@ function Jobs(){
 									<Route path={`:${job.slug}/:${job._id}`} element={<JobDetail/>} key={job._id}/>
 								);
 							})}
-							<Route path='*' element={<Error/>}/>
         				</Routes>
-						<h4 className="text-center text-occupation">Choose your occupation</h4>
 					</div>
 
 				</div>
