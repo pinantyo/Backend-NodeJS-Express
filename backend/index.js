@@ -1,17 +1,37 @@
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
-const app = express();
-const mongoose = require('mongoose');
 const path = require("path")
-
+const http = require('http');
+const { Server } = require("socket.io");
 require("./config/database").connect();
 
+// Making HTTP server
+const app = express();
+const server = http.createServer(app);
+
+// Socket.io
+const io = new Server(server, {
+  transports:['polling'],
+  cors:{
+    origin: 'http://localhost:3000',
+  }
+});
+
+io.on('connection', (socket) => {
+  console.log('A user is connected');
+  socket.on('message', (message) => {
+    console.log(`message from ${socket.id}`);
+  });
+  socket.on('disconnect', () => {
+    console.log(`socket ${socket.id} disconnected`);
+  });
+})
+module.exports = {io};
+
+
 app.use("/public", express.static(__dirname + '/public')); // Pembuatan global folder
-
-app.set("views",path.join(__dirname,"views"))
-
+app.set("views",path.join(__dirname,"views"));
 
 var corsOptions = {
   origin: 'http://localhost:3000',
@@ -28,4 +48,4 @@ app.use('/api/', require('./routes'));
 
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server started on port ${port}`));
+server.listen(port, () => console.log(`Server started on port ${port}`));

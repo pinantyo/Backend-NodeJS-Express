@@ -1,4 +1,4 @@
-import {useState, useRef, useCallback} from 'react';
+import {useState} from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
 
 // Import controller
@@ -16,26 +16,10 @@ import Error from '../Error/Error';
 
 function Jobs(){
 	const [query, setQuery] = useState('');
-	const [pageNumber, setPageNumber] = useState(1);
-
-	const {jobs, hasMore, loading, error} = useJobsHook.useGetJobs(query, pageNumber);
-
-	const observe = useRef();
-	const lastJob = useCallback(node => {
-		if(loading) return;
-		if(observe.current) observe.current.disconnect();
-		observe.current = new IntersectionObserver(entries => {
-			if(entries[0].isIntersecting && hasMore){
-				setPageNumber(prevPageNumber => prevPageNumber + 1);
-			}
-		});
-
-		if(node) observe.current.observe(node);
-	},[loading, hasMore]);
+	const {jobs, loading, error} = useJobsHook.useGetJobs();
 
 	function inputQuery(e){
 		setQuery(e.target.value);
-		setPageNumber(1);
 	}
 
 	return(
@@ -67,7 +51,7 @@ function Jobs(){
 					        if (jobs.length === index + 1) {
 					          return(
 					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
-						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0" key={index}>
 										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
@@ -80,7 +64,7 @@ function Jobs(){
 					        } else {
 					          return(
 					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
-						            <div className="pageLoad card d-flex flex-row p-0 mb-0" ref={lastJob} key={index}>
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0" key={index}>
 										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>

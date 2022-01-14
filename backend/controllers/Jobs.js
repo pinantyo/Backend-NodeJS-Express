@@ -8,6 +8,9 @@ const User = require('../models/user');
 // User Validation
 const auth = require('../middleware/auth');
 
+// Socket.IO
+const {io} = require('../index');
+
 // Getting all
 const getAll = async (req, res) => {
   	try {
@@ -60,6 +63,8 @@ const createOne = async (req, res) => {
 
   	try {
     	const newJob = await jobs.save();
+    	const jobList = await Jobs.find().populate({path:'authorId'});
+    	io.emit('new-job', jobList);
     	return serverResponse.ok(res,newJob);
   	} catch (err) {
     	return serverResponse.error(res, 400, err.message);

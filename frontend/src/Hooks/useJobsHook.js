@@ -1,19 +1,35 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 
+import {io} from 'socket.io-client';
+
 
 const URL = 'http://127.0.0.1:5000/api' + '/jobs';
+const URL_SOCKET = 'ws://127.0.0.1:5000';
 
-const useGetJobs = (query, pageNumber) => {
-	if(query.length === 0) query="*";
+const useGetJobs = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [jobs, setJobs] = useState([]);
-	const [hasMore, setHasMore] = useState(false);
 
 	useEffect(() => {
-		setJobs([]);
-	}, []) //every change in query will result to a reset for var jobs
+		const socket = io(URL_SOCKET);
+		socket.on('connection', () => {
+			console.log("connected to server");
+		});
+
+		socket.on('new-job', (newList) => {
+			setJobs(newList);
+		});
+
+		socket.on('message', (message) => {
+			console.log(message);
+		});
+
+		socket.on('disconnect', () => {
+			console.log('Socket disconnecting');
+		});
+	}, [])
 
 	useEffect(() => {
 		setLoading(true);
@@ -32,13 +48,12 @@ const useGetJobs = (query, pageNumber) => {
 		})
 
 		return () => cancel();
-	}, [pageNumber]);
+	}, []);
 
 	return {
 		loading,
 		error,
 		jobs,
-		hasMore
 	};
 };
 
