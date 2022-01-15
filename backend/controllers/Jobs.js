@@ -32,18 +32,6 @@ const getOne = async (req, res) => {
 
 // Creating one
 const createOne = async (req, res) => {
-	const requiredFiled = ['authorId','jobTitle','jobDescription','jobRequirements'];
-	try{
-    	requiredFiled.forEach((field) => {
-      	if(!req.body[field]){
-        	throw new Error(`${field} must not be null`);
-      	}
-    });
-
-  	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
-  	}
-
 	// Check User
 	try{
 		const user = await User.findById(req.body.authorId);

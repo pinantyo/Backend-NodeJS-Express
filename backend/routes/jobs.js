@@ -10,6 +10,9 @@ const Jobs = require('../models/jobs')
 // Middleware
 const auth = require('../middleware/auth');
 
+// Middleware Validation
+const jobValidate = require('../middleware/job');
+
 // Controller
 const jobController = require('../controllers/Jobs');
 

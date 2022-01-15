@@ -12,11 +12,14 @@ const userController = require('../controllers/Account');
 const uploadImage = require('../middleware/imageUpload');
 const auth = require('../middleware/auth');
 
+// Middleware Validation
+const accountValidate = require('../middleware/account');
+
 // Route Account
 router.get('/', userController.getAll);
-router.get('/:id',auth.verifyToken,userController.getOne);
-router.post('/', userController.createOne);
-router.post('/login', userController.login);
+router.get('/:id',auth.verifyToken, userController.getOne);
+router.post('/', [accountValidate.checkDuplication, accountValidate.inputValidation], userController.createOne);
+router.post('/login', accountValidate.inputValidation, userController.login);
 router.patch('/:id', auth.verifyUser, uploadImage.userAvatar.single("image"),userController.patchOne);
 router.delete('/:id', auth.verifyUser, userController.deleteOne);
 

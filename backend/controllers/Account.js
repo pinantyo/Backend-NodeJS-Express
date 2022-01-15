@@ -40,20 +40,6 @@ const getOne = async (req, res) => {
 
 // Creating one
 const createOne = async (req, res) => {
-  
-  const requiredFiled = ['email', 'password'];
-  
-  try{
-    requiredFiled.forEach((field) => {
-      if(!req.body[field]){
-        throw new Error(`${field} must not be null`);
-      }
-    });
-
-  } catch (err) {
-    return serverResponse.error(res, 400, err.message);
-  }
-  
   const user = new User({
     email: req.body.email.toLowerCase(),
     username: req.body.username,
@@ -82,14 +68,7 @@ const createOne = async (req, res) => {
 const login = async (req, res) => {
   try {
     const {email, password} = req.body;
-
-    // Validate 
-    if (!(email && password)) {
-      return serverResponse(res, 400, "All input is required");
-    }
-
     const user = await User.findOne({ email });
-
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
       const token = jwt.sign(
@@ -99,10 +78,8 @@ const login = async (req, res) => {
           expiresIn: "2h",
         }
       );
-
       // save user token
       user.token = token;
-
       return serverResponse.ok(res, user);
     }
     return serverResponse.error(res,400,"Invalid Credentials");
