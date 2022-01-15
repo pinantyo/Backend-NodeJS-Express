@@ -23,8 +23,8 @@ function Jobs(){
 	}
 
 	return(
-		<div className="pageLoad">
-			<div className="container mt-4">
+		<div data-aos="fade-up">
+			<div className="container mt-4 pb-5">
 				<div className="row mb-5">
 					<h1 className="text-white text-center">List of Jobs</h1>
 				</div>

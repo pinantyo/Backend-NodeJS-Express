@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import {io} from 'socket.io-client';
 
-
 const URL = 'http://127.0.0.1:5000/api' + '/jobs';
 const URL_SOCKET = 'ws://127.0.0.1:5000';
 
@@ -14,20 +13,8 @@ const useGetJobs = () => {
 
 	useEffect(() => {
 		const socket = io(URL_SOCKET);
-		socket.on('connection', () => {
-			console.log("connected to server");
-		});
-
 		socket.on('new-job', (newList) => {
 			setJobs(newList);
-		});
-
-		socket.on('message', (message) => {
-			console.log(message);
-		});
-
-		socket.on('disconnect', () => {
-			console.log('Socket disconnecting');
 		});
 	}, [])
 
