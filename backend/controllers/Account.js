@@ -26,16 +26,16 @@ const getAll = async (req, res) => {
     if(user.length == 0){
       serverResponse.error(res, 404, 'Not Found');
     }
-    return serverResponse.ok(res, user);
+    serverResponse.ok(res, user);
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 }
 
 // Getting One
 const getOne = async (req, res) => {
   user = await getUser(req, res);
-  return serverResponse.ok(res, user);
+  serverResponse.ok(res, user);
 }
 
 // Creating one
@@ -58,9 +58,9 @@ const createOne = async (req, res) => {
 
   try {
     const newUser = await user.save()
-    return serverResponse.ok(res, newUser);
+    serverResponse.ok(res, newUser);
   } catch (err) {
-    return serverResponse.error(res, 400,err.message);
+    serverResponse.error(res, 400,err.message);
   }
 }
 
@@ -80,11 +80,11 @@ const login = async (req, res) => {
       );
       // save user token
       user.token = token;
-      return serverResponse.ok(res, user);
+      serverResponse.ok(res, user);
     }
-    return serverResponse.error(res,400,"Invalid Credentials");
+    serverResponse.error(res,400,"Invalid Credentials");
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 };
 
@@ -118,9 +118,9 @@ const patchOne = async (req, res) => {
   
   try {
     const updatedUser = await user.save();
-    return serverResponse.ok(res, updatedUser);
+    serverResponse.ok(res, updatedUser);
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
   }
 }
 
@@ -142,7 +142,7 @@ const deleteOne = async (req, res) => {
     await user.remove();
     return res.json({ message: 'Deleted User' });
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 }
 
@@ -152,7 +152,7 @@ const deleteOne = async (req, res) => {
 // Route
 const getDetails = async (req, res) => {
   const userInformation = await getUserDetails(req, res);
-  return serverResponse.ok(res, userInformation);
+  serverResponse.ok(res, userInformation);
 };
 
 
@@ -166,7 +166,7 @@ const postDetails = async (req, res) => {
       }
     });
   } catch(err){
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 
   var formattedName = req.body.fullname.toLowerCase().split(" ");
@@ -185,9 +185,9 @@ const postDetails = async (req, res) => {
   });
   try {
     const newUser = await user.save()
-    return serverResponse.ok(res, newUser);
+    serverResponse.ok(res, newUser);
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
   }
 };
 
@@ -197,7 +197,7 @@ const patchDetails = async (req, res) => {
   try{
     userInformation = await getUserDetails(req, res);
   } catch (err) {
-    return serverResponse.error(res, 404, err.message);
+    serverResponse.error(res, 404, err.message);
   }
   
   field = ['fullname','contacts','location','companySize'];
@@ -210,9 +210,9 @@ const patchDetails = async (req, res) => {
 
   try {
     const updatedUser = await userInformation.save();
-    return serverResponse.ok(res, updatedUser);
+    serverResponse.ok(res, updatedUser);
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
   }
 };
 
@@ -222,14 +222,14 @@ const deleteDetails = async (req, res) => {
   try{
     userInformation = await getUserDetails(req, res);
   } catch (err) {
-    return serverResponse.error(res, 404, err.message);
+    serverResponse.error(res, 404, err.message);
   }
 
   try {
     await userInformation.remove()
     return res.json({ message: 'Deleted User' })
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
 };
 
@@ -238,10 +238,10 @@ async function getUser(req, res){
   try {
     user = await User.findById(req.params.id)
     if (user.length == 0) {
-      return serverResponse.error(res, 404, "Not Found");
+      serverResponse.error(res, 404, "Not Found");
     }
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
   }
   return user;
 }

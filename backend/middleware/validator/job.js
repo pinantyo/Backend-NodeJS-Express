@@ -1,5 +1,4 @@
 const serverResponse = require('../../response');
-const Jobs = require('../../models/jobs');
 
 const inputValidation = async (req, res, next) => {
 	const requiredFiled = ['authorId','jobTitle','jobDescription','jobRequirements'];

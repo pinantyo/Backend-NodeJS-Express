@@ -11,27 +11,18 @@ const Jobs = require('../models/jobs')
 const auth = require('../middleware/auth');
 
 // Middleware Validation
-const jobValidate = require('../middleware/job');
+// Middleware Validation
+const validator = require('../middleware/validator/job');
 
 // Controller
 const jobController = require('../controllers/Jobs');
 
-// Getting all
+
 router.get('/', jobController.getAll);
-
-// Getting One
 router.get('/:slug/:id', jobController.getOne);
-
-// Creating one
-router.post('/', auth.verifyToken, jobController.createOne);
-
-// Updating One
+router.post('/', [auth.verifyToken, validator.inputValidation], jobController.createOne);
 router.patch('/:slug/:id', auth.verifyUser, jobController.patchOne);
-
-// Deleting One
 router.delete('/:slug/:id', auth.verifyUser, jobController.deleteOne);
-
-// Search Related
 router.get('/search', jobController.searchJob);
 
 module.exports = router;

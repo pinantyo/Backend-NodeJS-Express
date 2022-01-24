@@ -5,9 +5,6 @@ const serverResponse = require('../response');
 const Jobs = require('../models/jobs');
 const User = require('../models/user');
 
-// User Validation
-const auth = require('../middleware/auth');
-
 // Socket.IO
 const {io} = require('../index');
 
@@ -18,16 +15,16 @@ const getAll = async (req, res) => {
     	if(jobs.length == 0){
     		serverResponse.error(res, 404, "Not Found");
     	}
-    	return serverResponse.ok(res,jobs);
+    	serverResponse.ok(res,jobs);
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
   	}
 };
 
 // Getting One
 const getOne = async (req, res) => {
 	const jobs = await getJob(req, res);
-  	return serverResponse.ok(res, jobs);
+  	serverResponse.ok(res, jobs);
 };
 
 // Creating one
@@ -53,9 +50,9 @@ const createOne = async (req, res) => {
     	const newJob = await jobs.save();
     	const jobList = await Jobs.find().populate({path:'authorId'});
     	io.emit('new-job', jobList);
-    	return serverResponse.ok(res,newJob);
+    	serverResponse.ok(res,newJob);
   	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
+    	serverResponse.error(res, 400, err.message);
   	}
 };
 
@@ -77,9 +74,9 @@ const patchOne = async (req, res) => {
 
   	try {
     	const updatedUser = await jobs.save();
-    	return serverResponse.ok(res, updatedUser);
+    	serverResponse.ok(res, updatedUser);
   	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
+    	serverResponse.error(res, 400, err.message);
   	}
 };
 
@@ -90,7 +87,7 @@ const deleteOne = async (req, res) => {
     	await jobs.remove()
     	res.json({ message: 'Deleted Jobs' })
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
   	}
 };
 
@@ -110,10 +107,10 @@ async function getJob(req, res) {
   	try {
     	jobs = await Jobs.findById(req.params.id).populate({path:'authorId'});
     	if (jobs.length == 0) {
-      		return serverResponse.error(res, 404, 'Not Found');
+      		serverResponse.error(res, 404, 'Not Found');
     	}
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
   	}
   	return jobs;
 }
