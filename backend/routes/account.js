@@ -20,6 +20,7 @@ router.get('/', userController.getAll);
 router.get('/:id',auth.verifyToken, userController.getOne);
 router.post('/', [validator.checkDuplication, validator.inputValidation], userController.createOne);
 router.post('/login', validator.inputValidation, userController.login);
+router.post('/api/v1/auth/google', userController.loginGoogle);
 router.patch('/:id', auth.verifyUser, uploadImage.userAvatar.single("image"),userController.patchOne);
 router.delete('/:id', auth.verifyUser, userController.deleteOne);
 

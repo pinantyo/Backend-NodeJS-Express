@@ -1,4 +1,4 @@
-import {useState, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import { useParams } from 'react-router-dom';
 import './JobDetail.css';
 

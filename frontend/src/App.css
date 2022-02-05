@@ -66,3 +66,11 @@ body {
   position: relative;
   top: 20%;
 }
+
+.account{
+  color: white;
+}
+
+.notif{
+  background-color: #F84F31;
+}

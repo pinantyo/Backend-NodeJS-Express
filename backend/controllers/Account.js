@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+// Google Authentication
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
+
 // Models
 const User = require('../models/user');
 const userDetail = require('../models/userDetails');
@@ -87,6 +91,21 @@ const login = async (req, res) => {
     serverResponse.error(res, 500, err.message);
   }
 };
+
+const loginGoogle = async (req, res) => {
+  try{
+      const { token }  = req.body
+      const ticket = await client.verifyIdToken({
+          idToken: token,
+          audience: process.env.CLIENT_ID
+      });
+      const { name, email, picture } = ticket.getPayload();    
+      console.log(`${name} - ${email}`);
+      serverResponse.ok(res, email);
+    } catch(err){
+      serverResponse.error(res, 500, err.message);
+    }
+}
 
 // Updating One
 const patchOne = async (req, res) => {
@@ -260,4 +279,4 @@ async function getUserDetails(req, res) {
   return userInformation;
 };
 
-module.exports = {getAll, getOne, createOne, login, patchOne, deleteOne, getDetails, postDetails, patchDetails, deleteDetails};
+module.exports = {getAll, getOne, createOne, login, loginGoogle, patchOne, deleteOne, getDetails, postDetails, patchDetails, deleteDetails};

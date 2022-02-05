@@ -1,0 +1,14 @@
+.back{
+	border: 0!important;
+	background-color: transparent!important;
+	width: 12%;;
+}
+.bi-box-arrow-left{
+	width: 100%!important;
+}
+
+#imgdiv{
+	background-image: url('https://wallpapercave.com/wp/wp9571412.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+}

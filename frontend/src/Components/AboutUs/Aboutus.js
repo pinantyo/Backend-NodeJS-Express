@@ -1,5 +1,5 @@
+import React from 'react';
 //Import css
-
 import './Aboutus.css';
 import '../global.css';
 
