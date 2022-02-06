@@ -8,7 +8,7 @@ import './login.css';
 
 export default function Login(){
 	const navigate = useNavigate();
-	const handleLogin = async googleData => {
+	const handleLogin = async (googleData) => {
 	  	const res = await axios.post("/api/v1/auth/google", {
 	      	body: JSON.stringify({
 	      		token: googleData.tokenId
@@ -16,8 +16,6 @@ export default function Login(){
 	      		"Content-Type": "application/json"
 	    	}
 	  	})
-	  	const data = await res.json()
-	  	// store returned user somehow
 	}
 	return(
 		<>

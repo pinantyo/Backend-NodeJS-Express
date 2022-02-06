@@ -25,16 +25,8 @@ jobSchema.index({jobTitle: 'text', authorId: 'text'});
 
 jobSchema.pre('save', function(next){
     var job = this;
-
     if(!job.isModified('jobTitle')) return next();
-
-    var formattedName = job.jobTitle.toLowerCase().split(" ");
-
-    for(var i=0; i < formattedName.length; i++){
-      formattedName[i] = formattedName[i][0].toUpperCase() + formattedName[i].substr(1);
-    }
-
-    job.jobTitle = formattedName.join(" ");
+    job.jobTitle = job.jobTitle.toUpperCase();
     next();
 });
 

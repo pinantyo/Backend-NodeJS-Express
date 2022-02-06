@@ -9,6 +9,8 @@
 
 #imgdiv{
 	background-image: url('https://wallpapercave.com/wp/wp9571412.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
+	background-attachment: fixed!important;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover!important;
 }

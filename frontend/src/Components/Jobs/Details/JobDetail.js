@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import './JobDetail.css';
 
@@ -7,7 +7,7 @@ import useJobsHook from '../../../Hooks/useJobsHook';
 
 function JobDetail(){
 	const [slug, id] = useParams()['*'].split('/');
-	const {loading, error, jobs} = useJobsHook.useGetJob(slug, id);
+	const {loading, _, jobs} = useJobsHook.useGetJob(slug, id);
 	return(
 		<>
 			{slug && id &&

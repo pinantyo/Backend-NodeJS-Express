@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import {io} from 'socket.io-client';
 
-const URL = 'http://127.0.0.1:5000/api' + '/jobs';
+const URL = 'http://127.0.0.1:5000/api/jobs';
 const URL_SOCKET = 'ws://127.0.0.1:5000';
 
 const useGetJobs = () => {
@@ -13,9 +13,11 @@ const useGetJobs = () => {
 
 	useEffect(() => {
 		const socket = io(URL_SOCKET);
-		socket.on('new-job', (newList) => {
-			setJobs(newList);
-		});
+	  	socket.on('new-job', (newList) => {
+	    	try {
+	      		setJobs(newList);
+	    	} catch (e) {}
+	  	});
 	}, [])
 
 	useEffect(() => {
@@ -71,7 +73,7 @@ const useGetJob = (slug, id) => {
 		})
 
 		return () => cancel();
-	}, [id]);
+	}, [id, slug]);
 
 	return {
 		loading,

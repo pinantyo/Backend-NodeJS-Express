@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink, withRouter, useNavigate } from "react-router-dom";
+import { Routes, Route, NavLink } from "react-router-dom";
 
 // Import controller
 import useJobsHook from '../../Hooks/useJobsHook';
@@ -11,12 +11,11 @@ import '../global.css';
 // Components Detail
 import JobDetail from './Details/JobDetail';
 // Components error
-import Error from '../Error/Error';
 
 
 function Jobs(){
 	const [query, setQuery] = useState('');
-	const {jobs, loading, error} = useJobsHook.useGetJobs();
+	const {jobs, loading, _} = useJobsHook.useGetJobs();
 
 	function inputQuery(e){
 		setQuery(e.target.value);

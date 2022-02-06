@@ -11,7 +11,6 @@ const verifyToken = (req, res, next) => {
 
 const verifyAuthenticated = (req, res, next) => {
 	let user;
-
 }
 
 const verifyAdmin = async (req, res, next) => {
@@ -31,12 +30,12 @@ const verifyAdmin = async (req, res, next) => {
 
 const verifyUser = async (req, res, next) => {
 	let user;
-
+	const token = req.headers["x-access-token"];
 	const decoded = verifyUserToken(token);
 	user = await User.findById(decoded.user_id);
 		
 	// Verify Specific User
-	if (!user || req.params.id !== decoded.user_id) {
+	if (!user) {
   		return serverResponse.error(res, 403, "Forbidden");
 	}
   	return next()
@@ -47,7 +46,6 @@ function verifyUserToken(token){
 	if(!token){
 		return serverResponse.error(res, 403, "A token is required for authentication");
 	}
-
 	try{
 		decoded = jwt.verify(token, process.env.TOKEN_KEY);
 	} catch(err){
