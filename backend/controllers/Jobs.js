@@ -54,10 +54,7 @@ const createOne = async (req, res) => {
   	try {
     	const newJob = await jobs.save();
     	const jobList = await Jobs.find().populate({path:'authorId'});
-    	io.on((socket)=>{
-    		socket.emit('new-job', jobList);
-    		console.log(socket);
-    	})
+    	io.sockets.emit('new-job', jobList);
     	serverResponse.ok(res,newJob);
     	return;
   	} catch (err) {
@@ -100,6 +97,7 @@ const deleteOne = async (req, res) => {
     	const jobList = await Jobs.find().populate({path:'authorId'});
     	io.emit('new-job', jobList);
     	res.json({ message: 'Deleted Jobs' })
+    	return;
   	} catch (err) {
     	serverResponse.error(res, 500, err.message);
     	return;
@@ -123,14 +121,14 @@ async function getJob(req, res) {
   	let jobs;
   	try {
     	jobs = await Jobs.findById(req.params.id).populate({path:'authorId'});
-    	if (jobs.length == 0) {
-      		serverResponse.error(res, 404, 'Not Found');
-      		return;
-    	}
   	} catch (err) {
     	serverResponse.error(res, 500, err.message);
     	return;
   	}
+  	if (!jobs) {
+  		serverResponse.error(res, 404, 'Not Found');
+  		return;
+	}
   	return jobs;
 }
 
