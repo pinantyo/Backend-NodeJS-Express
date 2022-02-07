@@ -7,13 +7,13 @@ import useJobsHook from '../../../Hooks/useJobsHook';
 
 function JobDetail(){
 	const [slug, id] = useParams()['*'].split('/');
-	const {loading, _, jobs} = useJobsHook.useGetJob(slug, id);
+	const {loading, jobs} = useJobsHook.useGetJob(slug, id);
 	return(
 		<>
 			{slug && id &&
 				<div className="bg-light w-100 flex-column" data-aos="fade-up">
 					<div className="d-flex flex-row p-5 m-0">
-						<img className={`w-50 p-2 ${loading ? "skeleton":""}`} src={jobs.authorId ? `http://localhost:5000/public/images/users/avatar/${jobs.authorId.img.filename.replace(' ','%20')}`:""} />
+						<img alt="company logo" className={`w-50 p-2 ${loading ? "skeleton":""}`} src={jobs.authorId ? `http://localhost:5000/public/images/users/avatar/${jobs.authorId.img.filename.replace(' ','%20')}`:""} />
 						<div className="pt-5 p-3 d-flex flex-column">
 							<h4 className={`${loading ? "skeleton" : ""}`}>{jobs.jobTitle}</h4>
 							<h6 className={`${loading ? "skeleton" : ""}`}>{jobs.authorId ? jobs.authorId.username : ""}</h6>

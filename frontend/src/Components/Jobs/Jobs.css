@@ -63,3 +63,18 @@
 	border-bottom: 0!important;
 	animation: 0!important;
 }
+
+.drop-down-active{
+	display: block!important;
+	position: absolute!important;
+	animation: opacity-on .3s ease-in-out;
+}
+
+.dropdown-menu{
+	top: 100%;
+}
+
+@keyframes opacity-on{
+	0%{opacity: 0;}
+	100%{opacity: 1;}
+}

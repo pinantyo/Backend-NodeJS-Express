@@ -15,10 +15,11 @@ import JobDetail from './Details/JobDetail';
 
 function Jobs(){
 	const [query, setQuery] = useState('');
-	const {jobs, loading, _} = useJobsHook.useGetJobs();
+	const {jobs, loading} = useJobsHook.useGetJobs();
 
-	function inputQuery(e){
+	const inputQuery =(e)=>{
 		setQuery(e.target.value);
+		console.log(query);
 	}
 
 	return(
@@ -28,30 +29,29 @@ function Jobs(){
 					<h1 className="text-white text-center">List of Jobs</h1>
 				</div>
 				
-				<div className="row form mt-5 mb-5">
-					<form className="d-flex flex-row justify-content-between m-0">
-						<input className="form-control" type="text" value={query} onChange={inputQuery}/>
+				<div className="row form mt-5 mb-5 dropdown">
+					<form className="d-flex flex-row justify-content-between m-0 p-0">
+						<input className="form-control dropdown-toggle" type="text" value={query} onChange={inputQuery}/>
 						<button type="submit" className="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
 	  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
 	</svg></button>
 					</form>
 
-					<ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					    <li><a className="dropdown-item" href="#">Action</a></li>
-					    <li><a className="dropdown-item" href="#">Another action</a></li>
-					    <li><a className="dropdown-item" href="#">Something else here</a></li>
+					<ul className={`dropdown-menu  ${query ? "drop-down-active" : ""}`} aria-labelledby="dropdownMenuLink">
+					    <li><a className="dropdown-item">{query}</a></li>
+					    <li><a className="dropdown-item">Another action</a></li>
+					    <li><a className="dropdown-item">Something else here</a></li>
 					</ul>				
 				</div>
-
 
 				<div className="d-flex flex-row">
 					<div className={`d-flex flex-column w-75 scrollcomponent job-list`}>
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
-					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
-						            <div className="pageLoad card d-flex flex-row p-0 mb-0" key={index}>
-										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={index}>
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0">
+										<img alt="company logo" className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
@@ -62,9 +62,9 @@ function Jobs(){
 					          )
 					        } else {
 					          return(
-					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link">
-						            <div className="pageLoad card d-flex flex-row p-0 mb-0" key={index}>
-										<img className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={index}>
+						            <div className="pageLoad card d-flex flex-row p-0 mb-0">
+										<img alt="company logo" className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
 											<h4 className="text-dark">{job.jobTitle}</h4>
 											<h6 className="text-dark">{job.authorId.username}</h6>
