@@ -13,18 +13,22 @@ const getAll = async (req, res) => {
   	try {
     	const jobs = await Jobs.find({}).populate({path:'authorId'});
     	if(jobs.length == 0){
-    		return serverResponse.error(res, 404, "Not Found");
+    		serverResponse.error(res, 404, "Not Found");
+    		return;
     	}
-    	return serverResponse.ok(res,jobs);
+    	serverResponse.ok(res,jobs);
+    	return;
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
+    	return;
   	}
 };
 
 // Getting One
 const getOne = async (req, res) => {
 	const jobs = await getJob(req, res);
-  	return serverResponse.ok(res, jobs);
+  	serverResponse.ok(res, jobs);
+  	return;
 };
 
 // Creating one
@@ -36,7 +40,8 @@ const createOne = async (req, res) => {
 			throw new Error("Account is needed");
 		}
 	} catch (err) {
-		return serverResponse.error(res, 403, err.message);
+		serverResponse.error(res, 403, err.message);
+		return;
 	}
 
   	const jobs = new Jobs({
@@ -49,10 +54,15 @@ const createOne = async (req, res) => {
   	try {
     	const newJob = await jobs.save();
     	const jobList = await Jobs.find().populate({path:'authorId'});
-    	io.emit('new-job', jobList);
-    	return serverResponse.ok(res,newJob);
+    	io.on((socket)=>{
+    		socket.emit('new-job', jobList);
+    		console.log(socket);
+    	})
+    	serverResponse.ok(res,newJob);
+    	return;
   	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
+    	serverResponse.error(res, 400, err.message);
+    	return;
   	}
 };
 
@@ -74,9 +84,11 @@ const patchOne = async (req, res) => {
 
   	try {
     	const updatedUser = await jobs.save();
-    	return serverResponse.ok(res, updatedUser);
+    	serverResponse.ok(res, updatedUser);
+    	return;
   	} catch (err) {
-    	return serverResponse.error(res, 400, err.message);
+    	serverResponse.error(res, 400, err.message);
+    	return;
   	}
 };
 
@@ -89,7 +101,8 @@ const deleteOne = async (req, res) => {
     	io.emit('new-job', jobList);
     	res.json({ message: 'Deleted Jobs' })
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
+    	return;
   	}
 };
 
@@ -97,10 +110,12 @@ const searchJob = async (req, res) => {
 	try{
 		const jobs = await getJobByName(req, res);
 		if(jobs){
-			return serverResponse.ok(res, jobs);
+			serverResponse.ok(res, jobs);
+			return;
 		}
 	} catch(err) {
-		return serverResponse.error(res, 500, err.message);
+		serverResponse.error(res, 500, err.message);
+		return;
 	}
 };
 
@@ -109,10 +124,12 @@ async function getJob(req, res) {
   	try {
     	jobs = await Jobs.findById(req.params.id).populate({path:'authorId'});
     	if (jobs.length == 0) {
-      		return serverResponse.error(res, 404, 'Not Found');
+      		serverResponse.error(res, 404, 'Not Found');
+      		return;
     	}
   	} catch (err) {
-    	return serverResponse.error(res, 500, err.message);
+    	serverResponse.error(res, 500, err.message);
+    	return;
   	}
   	return jobs;
 }
@@ -134,10 +151,12 @@ async function getJobByName(req, res){
   //   	}]);
 		// jobs = await Jobs.find({jobTitle:req.body.search})
 		if(jobs.length == 0){
-			return serverResponse.error(res, 404, 'Not Found');
+			serverResponse.error(res, 404, 'Not Found');
+			return;
 		}
 	} catch(err) {
-		return serverResponse.error(res, 500, err.message)
+		serverResponse.error(res, 500, err.message)
+		return;
 	}
 	return jobs
 }

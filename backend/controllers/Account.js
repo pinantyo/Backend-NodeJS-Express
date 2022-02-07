@@ -28,18 +28,22 @@ const getAll = async (req, res) => {
   try {
     const user = await User.find({});
     if(user.length == 0){
-      return serverResponse.error(res, 404, 'Not Found');
+      serverResponse.error(res, 404, 'Not Found');
+      return;
     }
-    return serverResponse.ok(res, user);
+    serverResponse.ok(res, user);
+    return;
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 }
 
 // Getting One
 const getOne = async (req, res) => {
   user = await getUser(req, res);
-  return serverResponse.ok(res, user);
+  serverResponse.ok(res, user);
+  return;
 }
 
 // Creating one
@@ -62,9 +66,11 @@ const createOne = async (req, res) => {
 
   try {
     const newUser = await user.save()
-    return serverResponse.ok(res, newUser);
+    serverResponse.ok(res, newUser);
+    return;
   } catch (err) {
-    return serverResponse.error(res, 400,err.message);
+    serverResponse.error(res, 400,err.message);
+    return;
   }
 }
 
@@ -84,11 +90,14 @@ const login = async (req, res) => {
       );
       // save user token
       user.token = token;
-      return serverResponse.ok(res, user);
+      serverResponse.ok(res, user);
+      return;
     }
-    return serverResponse.error(res,400,"Invalid Credentials");
+    serverResponse.error(res,400,"Invalid Credentials");
+    return;
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 };
 
@@ -101,9 +110,11 @@ const loginGoogle = async (req, res) => {
       });
       const { name, email, picture } = ticket.getPayload();    
       console.log(`${name} - ${email}`);
-      return serverResponse.ok(res, email);
+      serverResponse.ok(res, email);
+      return;
     } catch(err){
-      return serverResponse.error(res, 500, err.message);
+      serverResponse.error(res, 500, err.message);
+      return;
     }
 }
 
@@ -137,9 +148,11 @@ const patchOne = async (req, res) => {
   
   try {
     const updatedUser = await user.save();
-    return serverResponse.ok(res, updatedUser);
+    serverResponse.ok(res, updatedUser);
+    return;
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
+    return;
   }
 }
 
@@ -161,7 +174,8 @@ const deleteOne = async (req, res) => {
     await user.remove();
     return res.json({ message: 'Deleted User' });
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 }
 
@@ -171,7 +185,8 @@ const deleteOne = async (req, res) => {
 // Route
 const getDetails = async (req, res) => {
   const userInformation = await getUserDetails(req, res);
-  return serverResponse.ok(res, userInformation);
+  serverResponse.ok(res, userInformation);
+  return;
 };
 
 
@@ -185,7 +200,8 @@ const postDetails = async (req, res) => {
       }
     });
   } catch(err){
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 
   var formattedName = req.body.fullname.toLowerCase().split(" ");
@@ -204,9 +220,11 @@ const postDetails = async (req, res) => {
   });
   try {
     const newUser = await user.save()
-    return serverResponse.ok(res, newUser);
+    serverResponse.ok(res, newUser);
+    return;
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
+    return;
   }
 };
 
@@ -216,7 +234,8 @@ const patchDetails = async (req, res) => {
   try{
     userInformation = await getUserDetails(req, res);
   } catch (err) {
-    return serverResponse.error(res, 404, err.message);
+    serverResponse.error(res, 404, err.message);
+    return;
   }
   
   field = ['fullname','contacts','location','companySize'];
@@ -229,9 +248,11 @@ const patchDetails = async (req, res) => {
 
   try {
     const updatedUser = await userInformation.save();
-    return serverResponse.ok(res, updatedUser);
+    serverResponse.ok(res, updatedUser);
+    return;
   } catch (err) {
-    return serverResponse.error(res, 400, err.message);
+    serverResponse.error(res, 400, err.message);
+    return;
   }
 };
 
@@ -241,14 +262,16 @@ const deleteDetails = async (req, res) => {
   try{
     userInformation = await getUserDetails(req, res);
   } catch (err) {
-    return serverResponse.error(res, 404, err.message);
+    serverResponse.error(res, 404, err.message);
+    return;
   }
 
   try {
     await userInformation.remove()
     return res.json({ message: 'Deleted User' })
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 };
 
@@ -257,10 +280,12 @@ async function getUser(req, res){
   try {
     user = await User.findById(req.params.id)
     if (user.length == 0) {
-      return serverResponse.error(res, 404, "Not Found");
+      serverResponse.error(res, 404, "Not Found");
+      return;
     }
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
   return user;
 }
@@ -270,10 +295,12 @@ async function getUserDetails(req, res) {
   try {
     userInformation = await userDetail.findOne({account_id:req.params.id}).populate({path:'account_id',});
     if (userInformation == null) {
-      return serverResponse.error(res, 404, 'Not Found');
+      serverResponse.error(res, 404, 'Not Found');
+      return;
     }
   } catch (err) {
-    return serverResponse.error(res, 500, err.message);
+    serverResponse.error(res, 500, err.message);
+    return;
   }
 
   return userInformation;

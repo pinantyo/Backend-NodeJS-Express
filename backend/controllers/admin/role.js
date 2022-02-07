@@ -21,15 +21,18 @@ const unlinkAsync = promisify(fs.unlink)
 const getAll = async (req, res) => {
 	try{
 		const roles = await Role.find({});
-		return serverResponse.ok(res,roles);
+		serverResponse.ok(res,roles);
+		return;
 	} catch(err) {
 		serverResponse.error(res, 500, "Internal Server Error");
+		return;
 	}
 }
 
 const getOne = async (req, res) => {
 	const role = await findOneRole(req, res);
 	serverResponse.ok(res, role);
+	return;
 }
 
 const createOne = async (req, res) => {
@@ -40,8 +43,10 @@ const createOne = async (req, res) => {
 	try{
 		const role = await newRole.save();
 		serverResponse.ok(res, role);
+		return;
 	}catch(err){
 		serverResponse.error(res, 403, "Bad Input");
+		return;
 	}
 }
 
@@ -52,8 +57,10 @@ const patchOne = async (req, res) => {
 	try{
 		const updated = await role.save();
 		serverResponse.ok(res, updated);
+		return;
 	}catch(err){
 		serverResponse.error(res, 403, 'Bad Input');
+		return;
 	}
 }
 
@@ -69,9 +76,11 @@ async function findOneRole(req, res){
 		role = await Role.findById(req.params.id);
 		if(role === 0){
 			serverResponse.error(res, 404, 'Not Found');
+			return;
 		}
 	}catch(err){
 		serverResponse.error(res, 500, "Internal Server Error")
+		return;
 	}
 	return role;
 
