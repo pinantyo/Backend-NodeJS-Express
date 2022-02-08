@@ -22,7 +22,6 @@ const useGetJobs = () => {
 
 	useEffect(() => {
 		setLoading(true);
-		setError(false);
 		let cancel;
 		axios({
 			method: 'GET',
@@ -33,7 +32,7 @@ const useGetJobs = () => {
 			setLoading(false);
 		}).catch(e => {
 			if(axios.isCancel(e)) return; //Return if the error is axios cancel token
-			setError(true);
+			setError(e.message);
 		})
 
 		return () => cancel();
@@ -69,7 +68,7 @@ const useGetJob = (slug, id) => {
 			setLoading(false);
 		}).catch(e => {
 			if(axios.isCancel(e)) return; //Return if the error is axios cancel token
-			setError(true);
+			setError(e.message)
 		})
 
 		return () => cancel();

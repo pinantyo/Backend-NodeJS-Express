@@ -95,7 +95,7 @@ const deleteOne = async (req, res) => {
   		const jobs = await getJob(req, res);
     	await jobs.remove()
     	const jobList = await Jobs.find().populate({path:'authorId'});
-    	io.emit('new-job', jobList);
+    	io.sockets.emit('new-job', jobList);
     	res.json({ message: 'Deleted Jobs' })
     	return;
   	} catch (err) {
@@ -136,7 +136,6 @@ async function getJobByName(req, res){
 	let jobs;
 	try{
 		jobs = await Jobs.find({jobTitle:/req.body.search/i});
-
 		// Jobs.find({$text: {$search: /req.body.search/i}})
 		// jobs = await Jobs.aggregate([{
 		// 	$search: {

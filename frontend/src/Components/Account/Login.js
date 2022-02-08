@@ -6,12 +6,16 @@ import axios from "axios";
 // css
 import './login.css';
 
+// custom hooks
+import useAccountHook from '../../Hooks/useAccountHook';
+
 export default function Login(){
 	const [currentForm, setCurrent] = useState(0);
 	const [currentText, setText] = useState("Don't have account yet?");
+	const [data, setData] = useState("");
 
 	const navigate = useNavigate();
-	const handleLogin = async (googleData) => {
+	const handleGoogleLogin = async (googleData) => {
 	  	// await axios.post("/api/v1/auth/google", {
 	   //    	body: JSON.stringify({
 	   //    		token: googleData.tokenId
@@ -22,6 +26,17 @@ export default function Login(){
 	  	return;
 	}
 
+	const handleAccountLogin = (e) =>{
+		useAccountHook.useLogin(e);
+		navigate(-1);
+		return;
+	}
+
+	const handleAccountSignUp = (e) =>{
+		setData(e.target);
+		navigate(-1);
+	}	
+
 	const nextSection = () =>{
 		if(currentForm === 0){
 			setCurrent(1);
@@ -29,7 +44,7 @@ export default function Login(){
 		} 
 		else{ 
 			setCurrent(0);
-			setText("Don't have account yet?")
+			setText("Don't have account yet?");
 		}
 		return;
 	}
@@ -52,11 +67,11 @@ export default function Login(){
 								</svg>  
 							</button>
 						</div>
-						<form method="POST" className={`form-section ${currentForm ? "" : "form-section-active"} d-flex flex-column `}>
+						<form method="POST" onSubmit={handleAccountLogin} className={`form-section ${currentForm ? "" : "form-section-active"} d-flex flex-column `}>
 							<label htmlFor="email">EMAIL</label>
-							<input className="form-control" type="text" name="email"/>
+							<input className="form-control" type="text" value={data.email} name="email"/>
 							<label htmlFor="email">PASSWORD</label>
-							<input className="form-control" type="password" name="password" autoComplete="on"/>
+							<input className="form-control" type="password" value={data.password} name="password" autoComplete="on"/>
 							
 							<button type="submit" className="btn-login-account">
 								<div>
@@ -70,19 +85,19 @@ export default function Login(){
 
 							<GoogleLogin
 							    buttonText="Log in with Google"
-							    onSuccess={handleLogin}
-							    onFailure={handleLogin}
+							    onSuccess={handleGoogleLogin}
+							    onFailure={handleGoogleLogin}
 							    cookiePolicy={'single_host_origin'}
 							/>
 						</form>
 
-						<form method="POST" className={`form-section ${currentForm ? "form-section-active" : ""} d-flex flex-column `}>
+						<form method="POST" onSubmit={handleAccountSignUp} className={`form-section ${currentForm ? "form-section-active" : ""} d-flex flex-column `}>
 							<label htmlFor="email">EMAIL</label>
-							<input className="form-control" type="text" name="email"/>
+							<input className="form-control" type="text" name="email" value={data.email}/>
 							<label htmlFor="email">NAME</label>
-							<input className="form-control" type="text" name="name"/>
+							<input className="form-control" type="text" name="name" value={data.name}/>
 							<label htmlFor="email">PASSWORD</label>
-							<input className="form-control" type="password" name="password" autoComplete="on"/>
+							<input className="form-control" type="password" value={data.password} name="password" autoComplete="on"/>
 							
 							<button type="submit" className="btn-login-account">
 								<div>
