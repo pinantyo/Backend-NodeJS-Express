@@ -9,7 +9,12 @@ const URL_SOCKET = 'ws://127.0.0.1:5000';
 const useGetJobs = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
+
+	// Get data requests
 	const [jobs, setJobs] = useState([]);
+
+	// Inputs
+	const [inputs, setInputs] = useState({});
 
 	useEffect(() => {
 		const socket = io(URL_SOCKET);

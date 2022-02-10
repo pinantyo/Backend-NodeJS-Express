@@ -8,11 +8,9 @@ const ok = (res, data) =>{
 };
 
 const error = (res, code, error) => {
-	return res.status(code).json({
-		error: {
-			code:code,
-			message: error,
-		}
+	return res.status(code).send({
+		code:code,
+		message: error,
 	});
 };
 
