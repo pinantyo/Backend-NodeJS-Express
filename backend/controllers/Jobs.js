@@ -135,20 +135,9 @@ async function getJob(req, res) {
 async function getJobByName(req, res){
 	let jobs;
 	try{
-		jobs = await Jobs.find({jobTitle:/req.body.search/i});
-		// Jobs.find({$text: {$search: /req.body.search/i}})
-		// jobs = await Jobs.aggregate([{
-		// 	$search: {
-  //     			"index": "default",
-  //     			"text": {
-  //       			"path": "jobTitle",
-  //       			"query": req.body.search
-  //     			}
-  //   		}
-  //   	}]);
-		// jobs = await Jobs.find({jobTitle:req.body.search})
-		if(jobs.length == 0){
-			serverResponse.error(res, 404, 'Not Found');
+		jobs = await Jobs.find({jobTitle: {$regex : req.query.search, $options:"$i"}}).populate({path:'authorId'});
+		if(jobs){
+			serverResponse.ok(res,jobs);
 			return;
 		}
 	} catch(err) {

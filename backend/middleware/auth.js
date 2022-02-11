@@ -52,7 +52,7 @@ const verifyUser = async (req, res, next) => {
 
 function verifyUserToken(req, res){
 	let decoded;
-	const token = req.headers["x-access-token"];
+	const token = req.headers["x-access-token"] || req.headers.authorization;
 	if(!token){
 		serverResponse.error(res, 403, "A token is required for authentication");
 		return;

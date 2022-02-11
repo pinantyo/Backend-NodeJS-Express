@@ -86,4 +86,5 @@ const useGetJob = (slug, id) => {
 	};
 };
 
+
 export default {useGetJobs, useGetJob};

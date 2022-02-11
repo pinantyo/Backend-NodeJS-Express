@@ -90,7 +90,12 @@ const login = async (req, res) => {
       );
       // save user token
       user.token = token;
-      serverResponse.ok(res, user);
+
+      content = {
+        user:user.username,
+        accessToken:user.token
+      }
+      serverResponse.ok(res, content);
       return;
     }
     serverResponse.error(res,400,"Invalid Credentials");

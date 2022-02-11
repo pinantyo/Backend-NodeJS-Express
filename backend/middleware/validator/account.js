@@ -20,8 +20,7 @@ const inputValidation = (req, res, next) => {
 	try{
     	requiredFiled.forEach((field) => {
       		if(!req.body[field]){
-        		serverResponse.error(res, 400, {field:err.message});
-        		return;
+        		throw new Error(`${field} must not be null`);
       		}
     	});
   	} catch (err) {

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Routes, Route, NavLink } from "react-router-dom";
-
+import axios from "axios";
 // Import controller
 import useJobsHook from '../../Hooks/useJobsHook';
 
@@ -14,12 +14,29 @@ import JobDetail from './Details/JobDetail';
 
 
 function Jobs(){
+	const URL = "http://127.0.0.1:5000/api/jobs/search";
 	const [query, setQuery] = useState('');
+	const [search, setSearch] = useState('');
 	const {jobs, loading} = useJobsHook.useGetJobs();
 
-	const inputQuery =(e)=>{
+	const inputQuery = async (e) => {
 		setQuery(e.target.value);
-		console.log(query);
+
+		let cancel;
+
+		await axios({
+			method:'GET',
+			url:URL,
+			params: {
+				search: query
+		    },
+			cancelToken: new axios.CancelToken(c => cancel = c)
+		}).then(res => {
+			setSearch(res.data.success.data);
+			console.log(res.data.success.data);
+		}).catch(err => {
+			console.log(err.message);
+		})
 	}
 
 	return(
@@ -38,9 +55,19 @@ function Jobs(){
 					</form>
 
 					<ul className={`dropdown-menu  ${query ? "drop-down-active" : ""}`} aria-labelledby="dropdownMenuLink">
-					    <li><a className="dropdown-item">{query}</a></li>
-					    <li><a className="dropdown-item">Another action</a></li>
-					    <li><a className="dropdown-item">Something else here</a></li>
+						{search && 
+							search.map((job) => {
+								return(
+									<a className="d-flex flex-row p-3" key={job._id}>
+								    	<img className="w-25" src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} alt="company logo"/>
+								    	<div className="d-flex flex-column">
+								    		<h4 className="dropdown-item">{job.jobTitle}</h4>
+								    		<h5 className="dropdown-item">{job.authorId.username}</h5>
+								    	</div>
+								    </a>	
+								)
+							})
+						}
 					</ul>				
 				</div>
 
@@ -49,7 +76,7 @@ function Jobs(){
 						{jobs.map((job, index) => { 
 					        if (jobs.length === index + 1) {
 					          return(
-					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={index}>
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={job._id}>
 						            <div className="pageLoad card d-flex flex-row p-0 mb-0">
 										<img alt="company logo" className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
@@ -62,7 +89,7 @@ function Jobs(){
 					          )
 					        } else {
 					          return(
-					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={index}>
+					          	<NavLink to={`${job.slug}/${job._id}`} className="nav-link" key={job._id}>
 						            <div className="pageLoad card d-flex flex-row p-0 mb-0">
 										<img alt="company logo" className={`w-50 p-2 ${jobs.authorId ? "skeleton" : ""}`} src={`http://localhost:5000/public/images/users/avatar/${job.authorId.img.filename.replace(' ','%20')}`} />
 										<div className="m-auto p-2"> 
