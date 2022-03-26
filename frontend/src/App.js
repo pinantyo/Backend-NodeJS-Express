@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink, useParams } from "react-router-dom";
 
 //Import components
 import Home from './Components/Home/HomeIndex';
@@ -33,7 +33,7 @@ function App() {
               <li className="fs-5 text-white p-1">Services</li>
             </NavLink>
 
-            <NavLink to="/Login">
+            <a href="/Login">
               <div className="float-end">
                 <svg xmlns="http://www.w3.org/2000/svg" className="pe-2 account bi bi-person-square" fill="currentColor" viewBox="0 0 16 16" width="40" height="60">
                   <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
@@ -41,7 +41,7 @@ function App() {
                 </svg>
                 <span className="badge badge-secondary notif">1</span>
               </div>
-            </NavLink>
+            </a>
           </ul>
         </div>
 

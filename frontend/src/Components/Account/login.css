@@ -4,13 +4,13 @@
 	width: 12%;;
 }
 
-#imgdiv{
+/*#imgdiv{
 	background: url('https://wallpapercave.com/wp/wp9571412.jpg');
 	background-attachment: fixed!important;
   	background-position: center;
   	background-repeat: no-repeat;
   	background-size: cover!important;
-}
+}*/
 
 .btn-login-account{
 	background-color: rgb(255, 255, 255); 

@@ -21,8 +21,8 @@ const jobController = require('../controllers/Jobs');
 router.get('/', jobController.getAll);
 router.get('/:slug/:id', jobController.getOne);
 router.post('/', [auth.verifyToken, validator.inputValidation], jobController.createOne);
-router.patch('/:slug/:id', auth.verifyUser, jobController.patchOne);
-router.delete('/:slug/:id', auth.verifyUser, jobController.deleteOne);
+router.patch('/:slug/:id', [auth.verifyUserOperation], jobController.patchOne);
+router.delete('/:slug/:id', [auth.verifyUserOperation], jobController.deleteOne);
 router.get('/search', jobController.searchJob);
 
 module.exports = router;

@@ -126,7 +126,7 @@ const loginGoogle = async (req, res) => {
 // Updating One
 const patchOne = async (req, res) => {
   user = await getUser(req, res);
-	field = ['email', 'username', 'password'];
+	field = ['email', 'username', 'password','role'];
 	field.forEach((field) => {
 		if(req.body[field]){
 			user[field] = req.body[field];
@@ -134,7 +134,7 @@ const patchOne = async (req, res) => {
 	});
   
   // Single IMG
-  if(req.file){
+  if(req.body['img'] && req.file){
     if(user.img){
       await unlinkAsync(user.img.path);
     }
@@ -283,7 +283,7 @@ const deleteDetails = async (req, res) => {
 async function getUser(req, res){
   let user
   try {
-    user = await User.findById(req.params.id)
+    user = await User.findById(req.params.id).populate({path:'role',})
     if (user.length == 0) {
       serverResponse.error(res, 404, "Not Found");
       return;

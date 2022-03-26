@@ -2,6 +2,7 @@ require('dotenv').config();
 const jwt = require("jsonwebtoken");
 const serverResponse = require('../response');
 const User = require('../models/user');
+const Jobs = require('../models/jobs');
 
 const verifyToken = (req, res, next) => {
 	const decoded = verifyUserToken(req, res);
@@ -18,32 +19,61 @@ const verifyAuthenticated = (req, res, next) => {
 const verifyAdmin = async (req, res, next) => {
 	let user;
 	const decoded = verifyUserToken(req, res);
-	
-	if(decoded){
-		user = await User.findById(decoded.user_id);
-	} else {
-		return;
+	try{
+		if(decoded){
+			user = await User.findById(decoded.user_id);
+		} else {
+			return;
+		}
+	} catch(e) {
+		serverResponse.error(res, 404, "Not Found");
+  		return;
 	}
+		
 
-	if (!user && user.role !== 'admin') {
+	if (!user || user.role.role !== 'admin') {
   		serverResponse.error(res, 403, "Forbidden");
   		return;
 	}
 	return next();
 };
 
+const verifyUserOperation = async (req, res, next) =>{
+	let job;
+	const decoded = verifyUserToken(req, res);
+	try{
+		job = await Jobs.findById(req.params.id);
+	} catch(e) {
+		serverResponse.error(res, 404, "Not Found");
+		return;
+	}
+
+	if(decoded.user_id !== job.authorId._id){
+		serverResponse.error(res, 403, "Forbidden");
+		return;
+	}
+
+	return next();
+}
+
 
 const verifyUser = async (req, res, next) => {
 	let user;
 	const decoded = verifyUserToken(req, res);
-	if(decoded){
-		user = await User.findById(decoded.user_id);
+	try{
+		if(decoded){
+			user = await User.findById(decoded.user_id);
+		}
+		else{
+			return;
+		}
+	} catch(e){
+		serverResponse.error(res, 404, "Not Found");
+  		return ;
 	}
-	else{
-		return;
-	}
+	
 	// Verify Specific User
-	if (!user) {
+	if (!user || (req.params.id !== decoded.user_id)) {
   		serverResponse.error(res, 403, "Forbidden");
   		return ;
 	}
@@ -66,4 +96,4 @@ function verifyUserToken(req, res){
 	return decoded;
 }
 
-module.exports = {verifyToken, verifyAdmin, verifyUser};
+module.exports = {verifyToken, verifyAdmin, verifyUser, verifyUserOperation};
