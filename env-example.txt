@@ -4,3 +4,4 @@ DB_CLUSTER_NAME=
 DB_NAME=
 SESSION_EXPIRED=
 TOKEN_KEY=
+    // "start": "react-scripts start",

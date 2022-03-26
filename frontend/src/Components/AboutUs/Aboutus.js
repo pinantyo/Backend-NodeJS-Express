@@ -9,7 +9,7 @@ export default function Aboutus(){
 		<div className="pageLoad">
 			<div className="container mt-4">
 				<div>
-					<h1 className="text-white text-center">About Us</h1>
+					<h1 className="text-dark text-center">About Us</h1>
 				</div>
 				<div className="d-flex flex-row mb-5 mt-5">
 					<div className="card me-2">

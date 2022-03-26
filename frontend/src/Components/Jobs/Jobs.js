@@ -43,7 +43,7 @@ function Jobs(){
 		<div data-aos="fade-up">
 			<div className="container mt-4 pb-5">
 				<div className="row mb-5">
-					<h1 className="text-white text-center">List of Jobs</h1>
+					<h1 className="text-dark text-center">List of Jobs</h1>
 				</div>
 				
 				<div className="row form mt-5 mb-5 dropdown">
@@ -108,7 +108,7 @@ function Jobs(){
 							  <div className="spinner-border text-warning" role="status">
 							    <span className="sr-only"></span>
 							  </div>
-							  <span className="text-white ms-2">Loading...</span>
+							  <span className="text-dark ms-2">Loading...</span>
 							</div>
 						}
 					</div>

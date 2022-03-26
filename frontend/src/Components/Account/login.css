@@ -16,7 +16,7 @@
 	background-color: rgb(255, 255, 255); 
 	display: inline-flex; 
 	align-items: center; 
-	color: rgba(0, 0, 0, 0.54); 
+	color: rgba(0, 0, 0, 1)!important; 
 	box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 2px 0px, rgba(0, 0, 0, 0.24) 0px 0px 1px 0px; 
 	padding: 0px; border-radius: 2px; 
 	border: 1px solid transparent; 
@@ -52,6 +52,10 @@
 	100%{opacity: 1;}
 }
 
+.form-control{
+    margin-block-end: 5%;
+}
+
 .anchor{
 	border: 0;
     background-color: transparent;
@@ -71,4 +75,12 @@
 
 .danger-div{
 	text-indent: 10px!important;
+}
+
+.optionLogin{
+	display: grid;
+}
+
+.optionLogin button{
+	margin-block-end: 2%;
 }
